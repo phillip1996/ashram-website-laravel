@@ -1,5 +1,5 @@
 <template>
-  <div class="page-wrapper font-montserrat">
+  <div class="page-wrapper font-montserrat" v-cloak>
 
     <HeroSlider :slides="heroSlides" />
 
@@ -90,7 +90,7 @@
     </section>
 
     <!-- =========================================================
-         SECTION 3 — PODCASTS (DYNAMIC) with enhanced player
+         SECTION 3 — PODCASTS (DYNAMIC) 
     ========================================================= -->
     <section id="wisdom-series" class="py-16 md:py-24 bg-white">
       <div class="max-w-6xl mx-auto px-6 md:px-12">
@@ -116,9 +116,11 @@
               <div class="absolute bottom-0 left-0 h-0.5 w-0 bg-[#E1B137] group-hover:w-full transition-all duration-500 z-10"></div>
               <div class="relative h-48 overflow-hidden">
                 <img :src="podcast.thumbnail" :alt="podcast.title"
+                  loading="lazy"
                   class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
                 <div class="absolute inset-0 bg-gradient-to-t from-[#2b4b58]/70 to-transparent"></div>
                 <button @click="playPodcast(podcast)"
+                  :aria-label="currentPlaying === podcast.id && isPlaying ? 'Pause episode' : 'Play episode'"
                   class="absolute bottom-3 right-3 w-11 h-11 flex items-center justify-center shadow-lg transition-all duration-200"
                   :class="currentPlaying === podcast.id ? 'bg-[#E1B137]' : 'bg-white hover:bg-[#E1B137] group-hover:scale-105'">
                   <i :class="[
@@ -146,7 +148,7 @@
                 <div class="flex items-center justify-between pt-4 border-t border-slate-100">
                   <div class="flex items-center gap-2.5">
                     <div class="w-8 h-8 rounded-full overflow-hidden border-2 border-white shadow-sm">
-                      <img :src="podcast.speaker_avatar" :alt="podcast.speaker_name" class="w-full h-full object-cover" />
+                      <img :src="podcast.speaker_avatar" :alt="podcast.speaker_name" loading="lazy" class="w-full h-full object-cover" />
                     </div>
                     <div>
                       <p class="text-[#2b4b58] text-xs font-semibold">{{ podcast.speaker_name }}</p>
@@ -157,7 +159,9 @@
                     <span class="text-xs flex items-center gap-1">
                       <i class="fa-solid fa-headphones text-[10px]"></i> {{ podcast.listens }}
                     </span>
-                    <button @click="toggleBookmark(podcast)" class="hover:text-[#E1B137] transition-colors p-1">
+                    <button @click="toggleBookmark(podcast)" 
+                      :aria-label="podcast.bookmarked ? 'Remove bookmark' : 'Add bookmark'"
+                      class="hover:text-[#E1B137] transition-colors p-1">
                       <i class="fa-solid fa-bookmark text-sm" :class="podcast.bookmarked ? 'text-[#E1B137]' : ''"></i>
                     </button>
                   </div>
@@ -181,7 +185,7 @@
     </section>
 
     <!-- =========================================================
-         SECTION 4 — LATEST INSIGHTS (DYNAMIC + FEATURED CAROUSEL)
+         SECTION 4 — LATEST INSIGHTS 
     ========================================================= -->
     <section id="recent-articles" class="py-16 md:py-24 bg-[#f8f7f4]">
       <div class="max-w-6xl mx-auto px-6 md:px-12">
@@ -210,6 +214,7 @@
               class="group bg-white border border-slate-100 overflow-hidden hover:shadow-lg transition-all duration-400">
               <div class="h-44 overflow-hidden relative">
                 <img :src="article.image" :alt="article.title"
+                  loading="lazy"
                   class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
                 <div class="absolute inset-0 bg-gradient-to-t from-[#2b4b58]/20 to-transparent"></div>
               </div>
@@ -254,6 +259,85 @@
     </section>
 
     <!-- =========================================================
+         SECTION — AYURVEDIC RECIPES
+    ========================================================= -->
+    <section id="ayurvedic-recipes" class="py-16 md:py-24 bg-white">
+      <div class="max-w-6xl mx-auto px-6 md:px-12">
+        <div class="flex items-center justify-between mb-12">
+          <div>
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-8 h-0.5 bg-[#E1B137]"></div>
+              <span class="text-[#E1B137] text-[10px] font-bold uppercase tracking-[0.35em]">Ayurveda</span>
+            </div>
+            <h2 class="text-4xl md:text-5xl font-serif font-medium text-[#2b4b58]">
+              Ayurvedic <em class="not-italic text-[#E1B137]">Recipes</em>
+            </h2>
+            <p class="text-slate-400 text-sm max-w-sm mt-2">Ancient wisdom for modern wellness — the sister science of yoga.</p>
+          </div>
+          <Link
+            v-if="totalRecipesCount > 3"
+            href="/ayurvedic-recipes"
+            class="hidden sm:inline-flex items-center gap-2 text-[#2b4b58] hover:text-[#E1B137] font-bold text-xs uppercase tracking-wider transition-colors"
+          >
+            View All <i class="fa-solid fa-arrow-right"></i>
+          </Link>
+        </div>
+
+        <div v-if="recipes && recipes.length > 0" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div v-for="recipe in recipes" :key="recipe.id"
+            class="group bg-[#f8f7f4] border border-slate-100 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-400 relative">
+
+            <!-- Featured Badge -->
+            <div v-if="recipe.is_featured" class="absolute top-3 left-3 z-10">
+              <span class="bg-[#E1B137] text-[#0d1e26] text-[9px] font-bold px-2.5 py-1 rounded-md shadow-lg flex items-center gap-1">
+                <i class="fa-solid fa-star text-[10px]"></i>
+                Featured
+              </span>
+            </div>
+
+            <div class="relative h-48 overflow-hidden bg-slate-200">
+              <img 
+                :src="getRecipeImage(recipe)" 
+                :alt="recipe.title"
+                loading="lazy"
+                width="400"
+                height="300"
+                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                @error="handleImageError"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
+              <div class="absolute bottom-3 left-3">
+                <span class="bg-[#E1B137] text-[#0d1e26] text-[9px] font-bold px-3 py-1 uppercase tracking-widest">
+                  {{ recipe.category || 'Ayurvedic' }}
+                </span>
+              </div>
+              <div v-if="recipe.has_video" class="absolute top-3 right-3 bg-black/60 backdrop-blur-sm text-white text-xs px-2 py-1 rounded flex items-center gap-1">
+                <i class="fa-solid fa-play"></i> Video
+              </div>
+            </div>
+            <div class="p-6">
+              <h3 class="font-serif text-xl text-[#2b4b58] mb-2 group-hover:text-[#E1B137] transition-colors line-clamp-1">
+                {{ recipe.title }}
+              </h3>
+              <p class="text-slate-500 text-sm line-clamp-2">{{ recipe.description }}</p>
+              <Link :href="'/ayurvedic-recipes/' + recipe.slug"
+                class="mt-4 inline-flex items-center gap-2 text-[#2b4b58] hover:text-[#E1B137] text-xs font-bold uppercase tracking-wider transition-colors">
+                View Recipe <i class="fa-solid fa-arrow-right text-[10px]"></i>
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        <div v-else class="text-center py-12">
+          <div class="w-16 h-16 bg-[#E1B137]/10 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="fa-solid fa-mortar-pestle text-2xl text-[#E1B137]"></i>
+          </div>
+          <p class="text-slate-400 text-sm">No recipes available yet. Check back soon!</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
          SECTION 5 — PARTNERS (DYNAMIC)
     ========================================================= -->
     <section class="py-16 md:py-24 bg-[#20404c] relative overflow-hidden">
@@ -283,6 +367,7 @@
                 class="group relative bg-white/[0.04] border border-[#E1B137]/30 px-8 py-9 flex flex-col items-center justify-center gap-4 shrink-0 w-[220px] transition-all duration-400 hover:border-[#E1B137] hover:bg-white/[0.06] hover:scale-[1.02]">
                 <div class="h-14 flex items-center justify-center">
                   <img v-if="partner.logo" :src="partner.logo" :alt="partner.name"
+                    loading="lazy"
                     class="max-h-14 w-auto object-contain brightness-100 transition-all duration-300 group-hover:scale-105" />
                   <span v-else class="font-serif text-white/70 text-lg tracking-wide">
                     {{ partner.name }}
@@ -303,7 +388,7 @@
     </section>
 
     <!-- =========================================================
-         SECTION 6 — NEWS & UPDATES (DYNAMIC) with id="news-updates"
+         SECTION 6 — NEWS & UPDATES (DYNAMIC) 
     ========================================================= -->
     <section id="news-updates" class="py-16 md:py-24 bg-[#f8f7f4] overflow-hidden">
       <div class="max-w-6xl mx-auto px-6 md:px-12">
@@ -318,14 +403,15 @@
             </h2>
           </div>
 
-          <!-- Prev / Next controls -->
           <div v-if="newsPages.length > 1" class="flex items-center gap-3">
             <button @click="prevNewsPage" :disabled="currentNewsPage === 0"
+              :aria-label="'Previous page'"
               class="w-11 h-11 flex items-center justify-center border border-slate-300 text-slate-600 hover:bg-[#2b4b58] hover:text-white hover:border-[#2b4b58] transition-all disabled:opacity-30 disabled:pointer-events-none">
               <i class="fa-solid fa-chevron-left text-xs"></i>
             </button>
             <span class="text-slate-400 text-xs font-semibold tabular-nums">{{ currentNewsPage + 1 }} / {{ newsPages.length }}</span>
             <button @click="nextNewsPage" :disabled="currentNewsPage === newsPages.length - 1"
+              :aria-label="'Next page'"
               class="inline-flex items-center gap-2 bg-[#2b4b58] text-white px-7 py-3.5 text-[11px] font-bold uppercase tracking-[0.2em] hover:bg-[#E1B137] transition-all duration-300 group disabled:opacity-40 disabled:pointer-events-none">
               View More <i class="fa-solid fa-arrow-right text-xs group-hover:translate-x-1 transition-transform"></i>
             </button>
@@ -342,6 +428,7 @@
                 <div class="absolute bottom-0 left-0 h-0.5 w-0 bg-[#E1B137] group-hover:w-full transition-all duration-500 z-10"></div>
                 <div class="relative h-48 overflow-hidden">
                   <img :src="news.image" :alt="news.title"
+                    loading="lazy"
                     class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
                   <div class="absolute top-3 left-3">
                     <span class="bg-white/90 text-[#2b4b58] text-[9px] font-bold px-2.5 py-1 uppercase tracking-widest shadow-sm">
@@ -401,7 +488,8 @@
             height="100%"
             style="border:0;"
             allowfullscreen=""
-            loading="lazy">
+            loading="lazy"
+            title="Google Maps location of the ashram">
           </iframe>
         </div>
 
@@ -427,75 +515,78 @@
     </section>
 
     <!-- =========================================================
-         ENHANCED AUDIO PLAYER (sticky footer) with drag support
+         AUDIO PLAYER - Only renders when needed
     ========================================================= -->
-    <div v-if="currentPodcast" class="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-slate-200 shadow-2xl">
-      <div class="max-w-4xl mx-auto px-4 md:px-6 py-3 md:py-4">
-        <div class="flex items-center gap-3 md:gap-4">
-          <!-- Thumbnail -->
-          <img :src="currentPodcast.thumbnail" :alt="currentPodcast.title"
-            class="w-12 h-12 md:w-14 md:h-14 object-cover rounded-md shrink-0" />
-
-          <!-- Info -->
-          <div class="flex-1 min-w-0">
-            <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider">Now Playing</p>
-            <p class="text-sm font-medium text-[#2b4b58] truncate">{{ currentPodcast.title }}</p>
-            <p class="text-xs text-slate-400 truncate">{{ currentPodcast.speaker_name }}</p>
-          </div>
-
-          <!-- Controls -->
-          <div class="flex items-center gap-2 md:gap-4">
-            <button @click="skipBackward" class="text-slate-500 hover:text-[#2b4b58] transition text-sm md:text-base">
-              <i class="fa-solid fa-backward-step"></i>
-            </button>
-            <button @click="togglePlay"
-              class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#E1B137] hover:bg-[#2b4b58] transition flex items-center justify-center text-white text-lg">
-              <i :class="isPlaying ? 'fa-solid fa-pause' : 'fa-solid fa-play'"></i>
-            </button>
-            <button @click="skipForward" class="text-slate-500 hover:text-[#2b4b58] transition text-sm md:text-base">
-              <i class="fa-solid fa-forward-step"></i>
-            </button>
-            <button @click="closePlayer" class="text-slate-400 hover:text-red-500 transition ml-1">
-              <i class="fa-solid fa-xmark"></i>
-            </button>
-          </div>
-        </div>
-
-        <!-- Progress Bar with drag support -->
-        <div class="mt-2 flex items-center gap-3">
-          <span class="text-xs text-slate-400 font-mono tabular-nums min-w-[40px]">{{ formatTime(currentTime) }}</span>
-          <div
-            class="flex-1 relative py-2.5 -my-2.5 select-none touch-none"
-            :class="isDragging ? 'cursor-grabbing' : 'cursor-grab'"
-            @mousedown="onMouseDown"
-            @touchstart="onTouchStart"
-            @click="seekAudio"
-          >
-            <div class="relative h-1.5 group-hover:h-2 bg-slate-200 rounded-full overflow-visible transition-all duration-150">
-              <!-- Buffer progress -->
-              <div class="absolute inset-y-0 left-0 bg-slate-300/60 rounded-full"
-                :style="{ width: safeBufferedProgress + '%' }"></div>
-              <!-- Playback progress -->
-              <div class="absolute inset-y-0 left-0 bg-[#E1B137] rounded-full"
-                :class="isDragging ? '' : 'transition-all duration-100'"
-                :style="{ width: safePlaybackProgress + '%' }"></div>
-              <!-- Draggable thumb -->
-              <div
-                class="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-3.5 h-3.5 bg-[#E1B137] border-2 border-white rounded-full shadow transition-opacity duration-150"
-                :class="isDragging ? 'opacity-100 scale-125' : 'opacity-0 hover:opacity-100'"
-                :style="{ left: safePlaybackProgress + '%' }"
-              ></div>
+    <Teleport to="body">
+      <div v-if="currentPodcast" class="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-slate-200 shadow-2xl">
+        <div class="max-w-4xl mx-auto px-4 md:px-6 py-3 md:py-4">
+          <div class="flex items-center gap-3 md:gap-4">
+            <img :src="currentPodcast.thumbnail" :alt="currentPodcast.title"
+              loading="lazy"
+              class="w-12 h-12 md:w-14 md:h-14 object-cover rounded-md shrink-0" />
+            <div class="flex-1 min-w-0">
+              <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider">Now Playing</p>
+              <p class="text-sm font-medium text-[#2b4b58] truncate">{{ currentPodcast.title }}</p>
+              <p class="text-xs text-slate-400 truncate">{{ currentPodcast.speaker_name }}</p>
+            </div>
+            <div class="flex items-center gap-2 md:gap-4">
+              <button @click="skipBackward" 
+                :aria-label="'Skip backward 15 seconds'"
+                class="text-slate-500 hover:text-[#2b4b58] transition text-sm md:text-base">
+                <i class="fa-solid fa-backward-step"></i>
+              </button>
+              <button @click="togglePlay"
+                :aria-label="isPlaying ? 'Pause' : 'Play'"
+                class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#E1B137] hover:bg-[#2b4b58] transition flex items-center justify-center text-white text-lg">
+                <i :class="isPlaying ? 'fa-solid fa-pause' : 'fa-solid fa-play'"></i>
+              </button>
+              <button @click="skipForward"
+                :aria-label="'Skip forward 30 seconds'"
+                class="text-slate-500 hover:text-[#2b4b58] transition text-sm md:text-base">
+                <i class="fa-solid fa-forward-step"></i>
+              </button>
+              <button @click="closePlayer" 
+                :aria-label="'Close player'"
+                class="text-slate-400 hover:text-red-500 transition ml-1">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
             </div>
           </div>
-          <span class="text-xs text-slate-400 font-mono tabular-nums min-w-[40px]">{{ formatTime(currentDuration) }}</span>
-        </div>
-
-        <!-- Loading indicator -->
-        <div v-if="isLoading" class="absolute bottom-full left-0 right-0 h-0.5 bg-[#E1B137]/30 overflow-hidden">
-          <div class="h-full bg-[#E1B137] animate-loading-bar"></div>
+          <div class="mt-2 flex items-center gap-3">
+            <span class="text-xs text-slate-400 font-mono tabular-nums min-w-[40px]">{{ formatTime(currentTime) }}</span>
+            <div
+              class="flex-1 relative py-2.5 -my-2.5 select-none touch-none"
+              :class="isDragging ? 'cursor-grabbing' : 'cursor-grab'"
+              role="slider"
+              :aria-valuenow="Math.round(safePlaybackProgress)"
+              :aria-valuemin="0"
+              :aria-valuemax="100"
+              aria-label="Audio progress"
+              @mousedown="onMouseDown"
+              @touchstart="onTouchStart"
+              @click="seekAudio"
+            >
+              <div class="relative h-1.5 group-hover:h-2 bg-slate-200 rounded-full overflow-visible transition-all duration-150">
+                <div class="absolute inset-y-0 left-0 bg-slate-300/60 rounded-full"
+                  :style="{ width: safeBufferedProgress + '%' }"></div>
+                <div class="absolute inset-y-0 left-0 bg-[#E1B137] rounded-full"
+                  :class="isDragging ? '' : 'transition-all duration-100'"
+                  :style="{ width: safePlaybackProgress + '%' }"></div>
+                <div
+                  class="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-3.5 h-3.5 bg-[#E1B137] border-2 border-white rounded-full shadow transition-opacity duration-150"
+                  :class="isDragging ? 'opacity-100 scale-125' : 'opacity-0 hover:opacity-100'"
+                  :style="{ left: safePlaybackProgress + '%' }"
+                ></div>
+              </div>
+            </div>
+            <span class="text-xs text-slate-400 font-mono tabular-nums min-w-[40px]">{{ formatTime(currentDuration) }}</span>
+          </div>
+          <div v-if="isLoading" class="absolute bottom-full left-0 right-0 h-0.5 bg-[#E1B137]/30 overflow-hidden">
+            <div class="h-full bg-[#E1B137] animate-loading-bar"></div>
+          </div>
         </div>
       </div>
-    </div>
+    </Teleport>
 
   </div>
 </template>
@@ -504,8 +595,8 @@
 import GuestLayout from '@/Layouts/GuestLayout.vue'
 import HeroSlider from '../Components/HeroSlider.vue'
 import FeaturedCarousel from '@/Components/FeaturedCarousel.vue'
-import { Link, router } from '@inertiajs/vue3'
-import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
+import { Link } from '@inertiajs/vue3'
+import { ref, computed, onMounted, onUnmounted, watch, shallowRef } from 'vue'
 import AOS from 'aos'
 import 'aos/dist/aos.css'
 import axios from 'axios'
@@ -521,11 +612,14 @@ const props = defineProps({
   newsItems: Array,
   featuredArticles: Array,
   recentArticles: Array,
+  recipes: Array,
+  totalRecipesCount: Number,
   featuredPoints: Array,
   concencrationImg: String,
   indianExpoImg: String,
 })
 
+// ── Helper Functions ──
 const formatDate = (date) => {
   if (!date) return ''
   try {
@@ -540,6 +634,16 @@ const formatDate = (date) => {
   }
 }
 
+// ── Recipe Image Helper ──
+const getRecipeImage = (recipe) => {
+  return recipe.image_url || '/img/placeholder-recipe.jpg'
+}
+
+const handleImageError = (event) => {
+  console.warn('Image failed to load:', event.target.src)
+  event.target.src = '/img/placeholder-recipe.jpg'
+}
+
 // ── Podcast Player ──
 const showAllEpisodes = ref(false)
 const currentPlaying = ref(null)
@@ -548,14 +652,12 @@ const isPlaying = ref(false)
 const volume = ref(0.7)
 const currentTime = ref(0)
 const playbackProgress = ref(0)
-const audioElement = ref(null)
+const audioElement = shallowRef(null)
 const isLoading = ref(false)
 const bufferedProgress = ref(0)
 const currentDuration = ref(0)
 const isDragging = ref(false)
 
-// Clamp to a finite 0–100 range so a not-yet-loaded duration (NaN/0) never
-// produces a broken bar width or an unreachable/undraggable thumb position.
 const safePlaybackProgress = computed(() => {
   const p = playbackProgress.value
   if (!isFinite(p) || isNaN(p)) return 0
@@ -568,13 +670,13 @@ const safeBufferedProgress = computed(() => {
   return Math.min(100, Math.max(0, p))
 })
 
-const visiblePodcasts = computed(() =>
-  showAllEpisodes.value ? props.podcasts : props.podcasts?.slice(0, 3) || []
-)
+const visiblePodcasts = computed(() => {
+  if (!props.podcasts) return []
+  return showAllEpisodes.value ? props.podcasts : props.podcasts.slice(0, 3)
+})
 
 const toggleAllEpisodes = () => { showAllEpisodes.value = !showAllEpisodes.value }
 
-// ─── playPodcast with listen counter via axios ───
 const playPodcast = async (podcast) => {
   if (currentPlaying.value === podcast.id) { togglePlay(); return }
 
@@ -594,19 +696,25 @@ const playPodcast = async (podcast) => {
     return
   }
 
-  audioElement.value?.pause()
-  if (audioElement.value) audioElement.value.currentTime = 0
+  if (audioElement.value) {
+    audioElement.value.pause()
+    audioElement.value.currentTime = 0
+  }
   currentPlaying.value = podcast.id
   currentPodcast.value = podcast
   currentDuration.value = 0
   playbackProgress.value = 0
   bufferedProgress.value = 0
-  audioElement.value.src = podcast.audio
-  try {
-    await audioElement.value.play()
-    isPlaying.value = true
-  } catch (e) {
-    console.error('Playback failed:', e)
+  
+  if (audioElement.value) {
+    audioElement.value.src = podcast.audio
+    try {
+      await audioElement.value.play()
+      isPlaying.value = true
+    } catch (e) {
+      console.error('Playback failed:', e)
+      isLoading.value = false
+    }
   }
 }
 
@@ -621,12 +729,16 @@ const togglePlay = async () => {
       isPlaying.value = true
     } catch (e) {
       console.error('Playback failed:', e)
+      isLoading.value = false
     }
   }
 }
 
 const closePlayer = () => {
-  audioElement.value?.pause()
+  if (audioElement.value) {
+    audioElement.value.pause()
+    audioElement.value.src = ''
+  }
   isPlaying.value = false
   currentPlaying.value = null
   currentPodcast.value = null
@@ -636,16 +748,16 @@ const closePlayer = () => {
   isDragging.value = false
 }
 
-// Podcast apps (Apple Podcasts, Overcast, etc.) conventionally use an
-// asymmetric 15s-back / 30s-forward skip — this is intentional, not a bug.
 const skipBackward = () => {
-  if (audioElement.value)
+  if (audioElement.value) {
     audioElement.value.currentTime = Math.max(0, audioElement.value.currentTime - 15)
+  }
 }
 
 const skipForward = () => {
-  if (audioElement.value)
+  if (audioElement.value) {
     audioElement.value.currentTime = Math.min(audioElement.value.duration || 0, audioElement.value.currentTime + 30)
+  }
 }
 
 const toggleBookmark = (podcast) => {
@@ -671,7 +783,6 @@ const updateBuffered = () => {
   }
 }
 
-// ─── Seek helpers (click & drag) ───
 const getSeekTime = (event) => {
   if (!audioElement.value) return NaN
   const duration = audioElement.value.duration
@@ -694,7 +805,6 @@ const seekAudio = (event) => {
   }
 }
 
-// ─── Drag handlers (mouse) ───
 const onMouseDown = (event) => {
   if (!audioElement.value || !audioElement.value.duration || !isFinite(audioElement.value.duration)) return
   isDragging.value = true
@@ -714,7 +824,6 @@ const onMouseUp = () => {
   document.removeEventListener('mouseup', onMouseUp)
 }
 
-// ─── Touch support ───
 const onTouchStart = (event) => {
   if (!audioElement.value || !audioElement.value.duration || !isFinite(audioElement.value.duration)) return
   event.preventDefault()
@@ -747,13 +856,9 @@ watch(volume, (v) => {
   if (audioElement.value) audioElement.value.volume = v
 })
 
-// ── Keyboard shortcuts (VLC-style: Space = play/pause, ←/→ = skip) ──
 const handleKeydown = (e) => {
   if (!currentPodcast.value) return
   if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return
-  // Ignore auto-repeated keydown events from a held-down key — without this,
-  // holding an arrow key fires dozens of skips per second and jumps minutes
-  // ahead almost instantly instead of nudging a step at a time.
   if (e.repeat) return
 
   if (e.key === 'ArrowLeft') {
@@ -810,20 +915,24 @@ const prevNewsPage = () => {
 // ── Lifecycle ──
 const initAudio = () => {
   if (!audioElement.value) {
-    audioElement.value = new Audio()
-    audioElement.value.volume = volume.value
-    audioElement.value.addEventListener('timeupdate', updateProgress)
-    audioElement.value.addEventListener('loadedmetadata', () => {
-      currentDuration.value = audioElement.value.duration
+    const audio = new Audio()
+    audio.volume = volume.value
+    audio.addEventListener('timeupdate', updateProgress)
+    audio.addEventListener('loadedmetadata', () => {
+      currentDuration.value = audio.duration
     })
-    audioElement.value.addEventListener('waiting', () => {
+    audio.addEventListener('waiting', () => {
       isLoading.value = true
     })
-    audioElement.value.addEventListener('canplay', () => {
+    audio.addEventListener('canplay', () => {
       isLoading.value = false
     })
-    audioElement.value.addEventListener('progress', updateBuffered)
-    audioElement.value.addEventListener('ended', () => {
+    audio.addEventListener('progress', updateBuffered)
+    audio.addEventListener('error', (e) => {
+      console.error('Audio error:', e)
+      isLoading.value = false
+    })
+    audio.addEventListener('ended', () => {
       isPlaying.value = false
       playbackProgress.value = 0
       currentTime.value = 0
@@ -831,11 +940,25 @@ const initAudio = () => {
         if (!isPlaying.value) closePlayer()
       }, 3000)
     })
+    audioElement.value = audio
+  }
+}
+
+// Use requestIdleCallback for non-critical initialization
+const initAOS = () => {
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(() => {
+      AOS.init({ duration: 800, once: true, offset: 40, easing: 'ease-out' })
+    })
+  } else {
+    setTimeout(() => {
+      AOS.init({ duration: 800, once: true, offset: 40, easing: 'ease-out' })
+    }, 100)
   }
 }
 
 onMounted(() => {
-  AOS.init({ duration: 800, once: true, offset: 40, easing: 'ease-out' })
+  initAOS()
   initAudio()
   document.addEventListener('keydown', handleKeydown)
 })
@@ -844,12 +967,14 @@ onUnmounted(() => {
   if (audioElement.value) {
     audioElement.value.pause()
     audioElement.value.src = ''
+    audioElement.value = null
   }
   document.removeEventListener('keydown', handleKeydown)
   document.removeEventListener('mousemove', onMouseMove)
   document.removeEventListener('mouseup', onMouseUp)
   document.removeEventListener('touchmove', onTouchMove)
   document.removeEventListener('touchend', onTouchEnd)
+  AOS.refresh()
 })
 </script>
 
@@ -857,6 +982,17 @@ onUnmounted(() => {
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap');
 
 .font-montserrat { font-family: 'Montserrat', sans-serif; }
+
+[v-cloak] {
+  display: none;
+}
+
+.line-clamp-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
 
 .line-clamp-2 {
   display: -webkit-box;
@@ -875,7 +1011,6 @@ onUnmounted(() => {
   opacity: 0;
 }
 
-/* ── Partners marquee ── */
 .marquee-viewport {
   overflow: hidden;
 }
@@ -900,7 +1035,6 @@ onUnmounted(() => {
   }
 }
 
-/* ── Loading bar animation ── */
 @keyframes loadingBar {
   0% { transform: translateX(-100%); }
   100% { transform: translateX(100%); }

@@ -10,7 +10,7 @@
         :style="{ transform: `translateY(${heroParallax}px)`, top: '-15%', height: '130%' }"
       >
         <img
-          src="/img/our-journey-img.jpg"
+          src="/img/about.jpg"
           alt="The Lekki Ashram"
           class="w-full h-full object-cover"
         />
@@ -194,13 +194,13 @@
             <div>
               <div class="flex items-center gap-3 mb-5">
                 <div class="w-8 h-px bg-[#E1B137]"></div>
-                <span class="text-[#E1B137] text-[10px] font-bold uppercase tracking-[0.35em] font-display">Spiritual Leadership</span>
+                <span class="text-[#E1B137] text-[10px] font-bold uppercase tracking-[0.35em] font-display">Converner</span>
               </div>
               <h2 class="font-display text-3xl md:text-5xl text-[#2b4b58] leading-tight mb-6">
                 Iyke <em class="not-italic text-[#E1B137]">OHAEGBU</em>
               </h2>
               <p class="text-slate-500 text-sm md:text-base leading-relaxed">
-                Spiritual Director of The Art of Living Center, Iyke Ohaegbu has dedicated over 15 years to teaching Advaita Vedanta and guiding individuals toward self-realization. His teachings blend ancient wisdom with contemporary understanding.
+                Converner of The Art of Living Center, Iyke Ohaegbu has dedicated over 15 years to teaching Advaita Vedanta and guiding individuals toward self-realization. His teachings blend ancient wisdom with contemporary understanding.
               </p>
             </div>
 
@@ -263,7 +263,7 @@
             Board of <em class="not-italic text-[#E1B137]">Trustees</em>
           </h2>
           <p class="text-slate-400 max-w-md mx-auto text-sm leading-relaxed">
-            Six dedicated individuals who oversee our mission and ensure sustainable growth.
+            Three dedicated individuals who oversee our mission and ensure sustainable growth.
           </p>
         </div>
 
@@ -499,7 +499,7 @@
                 </div>
 
                 <button type="submit" :disabled="isSubmitting"
-                  class="w-full py-4 bg-[#E1B137] text-[#0d1e26] font-display font-bold text-[11px] uppercase tracking-[0.2em] hover:bg-[#2b4b58] hover:text-white transition-all duration-300 flex items-center justify-center gap-3 disabled:opacity-50">
+                  class="w-full py-4 bg-[#E1B137] text-[#0d1e26] font-display font-bold text-[11px] uppercase tracking-[0.2em] hover:bg-[#2b4b58] hover:text-white transition-all duration-300 flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed">
                   <i class="fa-solid" :class="isSubmitting ? 'fa-spinner fa-spin' : 'fa-paper-plane'"></i>
                   {{ isSubmitting ? 'Sending...' : 'Request Visit' }}
                 </button>
@@ -593,20 +593,50 @@ const closeModal = () => {
   document.body.style.overflow = '' 
 }
 
+// ── CORRECTED FORM SUBMISSION ──
 const submitForm = () => {
-  isSubmitting.value = true
+  // 1. Validate required fields
+  const requiredFields = ['visitType', 'date', 'time', 'name', 'email']
+  const newErrors = {}
+  
+  requiredFields.forEach(field => {
+    if (!form[field]) {
+      newErrors[field] = `${field.charAt(0).toUpperCase() + field.slice(1)} is required`
+    }
+  })
+  
+  if (Object.keys(newErrors).length > 0) {
+    errors.value = newErrors
+    showToast('Please fill in all required fields.', 'error')
+    return
+  }
+  
+  // 2. Reset errors and start submission
   errors.value = {}
+  isSubmitting.value = true
 
+  // 3. Timeout fallback (prevents infinite loading)
+  const timeoutId = setTimeout(() => {
+    if (isSubmitting.value) {
+      isSubmitting.value = false
+      showToast('Request timed out. Please try again.', 'error')
+    }
+  }, 30000)
+
+  // 4. Send request
   router.post('/visit-requests', form, {
     preserveState: true,
     preserveScroll: true,
     onSuccess: (page) => {
+      clearTimeout(timeoutId)
       isSubmitting.value = false
+      
       if (page.props.flash?.success) {
         showToast(page.props.flash.success, 'success')
       } else {
         showToast('Your visit request has been sent. We\'ll confirm within 24 hours.', 'success')
       }
+      
       setTimeout(() => {
         closeModal()
         Object.assign(form, {
@@ -622,13 +652,26 @@ const submitForm = () => {
       }, 2000)
     },
     onError: (err) => {
+      clearTimeout(timeoutId)
       isSubmitting.value = false
       errors.value = err
+      
       if (err.email) {
         showToast(err.email, 'error')
+      } else if (err.name) {
+        showToast(err.name, 'error')
+      } else if (err.date) {
+        showToast(err.date, 'error')
+      } else if (err.time) {
+        showToast(err.time, 'error')
       } else {
         showToast('Please check your form and try again.', 'error')
       }
+    },
+    onFinish: () => {
+      clearTimeout(timeoutId)
+      // Always reset submitting state when request finishes
+      isSubmitting.value = false
     }
   })
 }
@@ -657,64 +700,34 @@ const contributions = [
 const trustees = [
   {
     name: 'Mrs. Julie Ann Van-Vleck',
-    role: 'Chairperson',
-    expertise: 'Environmental Policy',
     bio: 'Former UNEP consultant with 20+ years in environmental policy and sustainable development.',
-    image: '/img/trustees/Julie Ann.jpg',
+    image: '/img/trustees/Julie Ann.png',
+    expertise: 'Environmental Policy',
+    role: 'Chairperson',
     linkedin: 'https://linkedin.com',
     twitter: 'https://twitter.com',
     email: 'julie@lekkiashram.org'
   },
   {
     name: 'Prof. Habeeb Abiodun Sanni',
-    role: 'Secretary',
-    expertise: 'Eastern Philosophy',
     bio: 'Head of Philosophy at University of Lagos, specializing in Eastern philosophy and consciousness.',
     image: '/img/trustees/Habeeb Sanni.jpg',
+    expertise: 'Philosophy',
+    role: 'Trustee',
     linkedin: 'https://linkedin.com',
     twitter: 'https://twitter.com',
     email: 'habeeb@lekkiashram.org'
   },
   {
     name: 'Dr. Narendra Nath Datta',
-    role: 'Treasurer',
-    expertise: 'Financial Strategy',
     bio: 'CFO of Green Energy Solutions, bringing financial expertise to sustainable initiatives.',
-    image: '/img/trustees/Narendra Datta.jpg',
+    image: '/img/trustees/Narendra Datta.png',
+    expertise: 'Finance',
+    role: 'Treasurer',
     linkedin: 'https://linkedin.com',
     twitter: 'https://twitter.com',
     email: 'narendra@lekkiashram.org'
   },
-  {
-    name: 'Mr. Ezra Olisamaka Ohaegbu',
-    role: 'Conservation Specialist',
-    expertise: 'Wildlife Conservation',
-    bio: 'Former WWF Africa Director with expertise in wildlife conservation and habitat protection.',
-    image: '/img/trustees/trustee4.jpg',
-    linkedin: 'https://linkedin.com',
-    twitter: 'https://twitter.com',
-    email: 'ezra@lekkiashram.org'
-  },
-  {
-    name: 'Mrs. Anupma Kapoor',
-    role: 'International Relations',
-    expertise: 'Global Partnerships',
-    bio: 'Facilitates global partnerships with Vedanta Society and other international organizations.',
-    image: '/img/trustees/trustee5.jpg',
-    linkedin: 'https://linkedin.com',
-    twitter: 'https://twitter.com',
-    email: 'anupma@lekkiashram.org'
-  },
-  {
-    name: 'Mr. Ikechukwu Emmanuel Ohaegbu',
-    role: 'Community Development',
-    expertise: 'Local Outreach',
-    bio: 'Leads local outreach programs and community engagement initiatives across Lagos.',
-    image: '/img/trustees/trustee6.jpg',
-    linkedin: 'https://linkedin.com',
-    twitter: 'https://twitter.com',
-    email: 'ike@lekkiashram.org'
-  }
 ]
 
 // ── Lifecycle ──

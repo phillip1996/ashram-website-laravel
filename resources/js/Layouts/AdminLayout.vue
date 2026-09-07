@@ -104,6 +104,17 @@
               <i class="fa-solid fa-bullhorn w-4 text-center text-sm"></i>
               News
             </Link>
+            <!-- ── Ayurvedic Recipes ── -->
+            <Link
+              href="/admin/ayurvedic-recipes"
+              class="flex items-center gap-3 px-4 py-2.5 rounded-md text-sm font-medium transition-all duration-200"
+              :class="isActive('/admin/ayurvedic-recipes')
+                ? 'bg-[#E1B137] text-[#2b4b58] font-semibold'
+                : 'text-white/70 hover:bg-white/10 hover:text-white'"
+            >
+              <i class="fa-solid fa-mortar-pestle w-4 text-center text-sm"></i>
+              Ayurvedic Recipes
+            </Link>
           </div>
           <hr class="border-white/10 mt-4" />
         </div>
@@ -228,7 +239,6 @@
         <button @click="sidebarOpen = true" class="text-[#2b4b58] text-lg">
           <i class="fa-solid fa-bars"></i>
         </button>
-        <img src="/img/logo.png" alt="The Lekki Ashram" class="h-7 w-auto object-contain" />
         <div class="w-5"></div>
       </div>
 

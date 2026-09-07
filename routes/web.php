@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\PartnerController;
 use App\Http\Controllers\Admin\PodcastController as AdminPodcastController;
 use App\Http\Controllers\Admin\SubscriberController;
 use App\Http\Controllers\Admin\VisitRequestController;
+use App\Http\Controllers\Admin\AyurvedicRecipeController as AdminAyurvedicRecipeController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\HomeController;
@@ -16,6 +17,7 @@ use App\Http\Controllers\PodcastController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SubscribeController;
 use App\Http\Controllers\VisitRequestController as PublicVisitRequestController;
+use App\Http\Controllers\AyurvedicRecipeController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -63,6 +65,10 @@ Route::get('/terms-of-use', function () {
 Route::get('/programs', function () {
     return Inertia::render('Programs');
 })->name('programs');
+
+// ── Ayurvedic Recipes ──
+Route::get('/ayurvedic-recipes', [AyurvedicRecipeController::class, 'index'])->name('ayurvedic-recipes.index');
+Route::get('/ayurvedic-recipes/{slug}', [AyurvedicRecipeController::class, 'show'])->name('ayurvedic-recipes.show');
 
 // ── Contact form submission ──
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
@@ -136,26 +142,22 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('podcasts', AdminPodcastController::class);
     Route::resource('articles', AdminArticleController::class);
     Route::resource('partners', PartnerController::class);
-
-    // NOTE: 'news' is treated as uncountable by Laravel's pluralizer, so the
-    // default route-model-binding parameter would be {news}. Our controller
-    // methods are type-hinted as NewsItem $newsItem, so we explicitly map
-    // the resource parameter to 'newsItem' to match — otherwise implicit
-    // binding silently fails and edit()/update()/destroy() receive an
-    // empty NewsItem instance instead of the real record.
     Route::resource('news', NewsItemController::class)->parameters(['news' => 'newsItem']);
 
-    // Subscribers
     Route::resource('subscribers', SubscriberController::class)->only(['index', 'destroy']);
     Route::patch('/subscribers/{subscriber}/toggle', [SubscriberController::class, 'toggleActive'])->name('subscribers.toggle');
 
-    // Contact Messages
     Route::resource('contact', ContactMessageController::class)->only(['index', 'destroy']);
     Route::patch('/contact/{message}/toggle-read', [ContactMessageController::class, 'toggleRead'])->name('contact.toggle-read');
 
-    // Visit Requests
     Route::resource('visit-requests', VisitRequestController::class)->only(['index', 'destroy']);
     Route::patch('/visit-requests/{visitRequest}/status', [VisitRequestController::class, 'updateStatus'])->name('visit-requests.update-status');
+
+    // ── Ayurvedic Recipes (Admin CRUD) ──
+    // ✅ Added parameters mapping to use {recipe} in URLs
+    Route::resource('ayurvedic-recipes', AdminAyurvedicRecipeController::class)
+        ->except(['show'])
+        ->parameters(['ayurvedic-recipes' => 'recipe']);
 });
 
 // ─────────────────────────────────────────────

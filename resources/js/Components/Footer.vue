@@ -16,7 +16,8 @@
             <div class="flex gap-3 pt-1">
               <a href="https://x.com/AshramLekki" class="footer-social"><i class="fa-brands fa-x-twitter"></i></a>
               <a href="https://www.facebook.com/share/1CkSnfWiCn/" class="footer-social"><i class="fa-brands fa-facebook"></i></a>
-              <a href="#" class="footer-social"><i class="fa-brands fa-instagram"></i></a>
+              <a href="https://www.instagram.com/lekkiadvaita?stkn=Z3cwZXpkaTN1OWMX" class="footer-social"><i class="fa-brands fa-instagram"></i></a>
+              <a href="https://www.tiktok.com/@guru.iyke?_r=1&_t=ZS-99VNndphiVN" class="footer-social"><i class="fa-brands fa-tiktok"></i></a>
             </div>
           </div>
 

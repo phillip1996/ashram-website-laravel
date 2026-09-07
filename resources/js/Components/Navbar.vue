@@ -49,7 +49,7 @@
                 @mouseenter="openDropdown"
                 @mouseleave="closeDropdown"
               >
-                <!-- 👇 Anchor links for Wisdom Series (Podcasts section) -->
+                <!-- Wisdom Series -->
                 <Link 
                   href="/#wisdom-series" 
                   class="dropdown-item block px-6 py-3 text-xs font-semibold uppercase tracking-wider text-[#2b4b58] hover:text-[#E1B137] hover:bg-slate-50 transition-all"
@@ -60,7 +60,7 @@
                     <i class="fa-solid fa-arrow-right text-[10px] opacity-0 group-hover:opacity-100 transition-all transform translate-x-0 group-hover:translate-x-1"></i>
                   </span>
                 </Link>
-                <!-- 👇 Anchor links for Recent Articles (Insights section) -->
+                <!-- Recent Articles -->
                 <Link 
                   href="/#recent-articles" 
                   class="dropdown-item block px-6 py-3 text-xs font-semibold uppercase tracking-wider text-[#2b4b58] hover:text-[#E1B137] hover:bg-slate-50 transition-all"
@@ -71,7 +71,7 @@
                     <i class="fa-solid fa-arrow-right text-[10px] opacity-0 group-hover:opacity-100 transition-all transform translate-x-0 group-hover:translate-x-1"></i>
                   </span>
                 </Link>
-                <!-- 👇 Anchor links for News & Updates -->
+                <!-- News & Update -->
                 <Link 
                   href="/#news-updates" 
                   class="dropdown-item block px-6 py-3 text-xs font-semibold uppercase tracking-wider text-[#2b4b58] hover:text-[#E1B137] hover:bg-slate-50 transition-all"
@@ -98,7 +98,9 @@
         <div class="hidden lg:flex items-center gap-5">
           <a href="https://x.com/AshramLekki" class="social-link text-base"><i class="fa-brands fa-x-twitter"></i></a>
           <a href="https://wwww.facebook.com/share/1CkSnfWiCn/" class="social-link text-base"><i class="fa-brands fa-facebook"></i></a>
-          <a href="#" class="social-link text-base"><i class="fa-brands fa-instagram"></i></a>
+          <a href="https://www.instagram.com/lekkiadvaita?stkn=Z3cwZXpkaTN1OWMX" class="social-link text-base"><i class="fa-brands fa-instagram"></i></a>
+          <!-- ✅ NEW: TikTok -->
+          <a href="https://www.tiktok.com/@guru.iyke?_r=1&_t=ZS-99VNndphiVN" class="social-link text-base"><i class="fa-brands fa-tiktok"></i></a>
         </div>
         <!-- Hamburger button - shown on tablet and mobile -->
         <button class="lg:hidden text-[#2B4B58] text-2xl z-50 ml-2" @click="isMenuOpen = !isMenuOpen">
@@ -171,7 +173,9 @@
         <div class="flex items-center gap-5 text-slate-400 border-t border-slate-100 mt-6 pt-6">
           <a href="https://x.com/AshramLekki" class="social-link text-base"><i class="fa-brands fa-x-twitter"></i></a>
           <a href="https://wwww.facebook.com/share/1CkSnfWiCn/" class="social-link text-base"><i class="fa-brands fa-facebook"></i></a>
-          <a href="#" class="social-link text-base"><i class="fa-brands fa-instagram"></i></a>
+          <a href="https://www.instagram.com/lekkiadvaita?stkn=Z3cwZXpkaTN1OWMX" class="social-link text-base"><i class="fa-brands fa-instagram"></i></a>
+          <!-- ✅ NEW: TikTok -->
+          <a href="https://www.tiktok.com/@guru.iyke?_r=1&_t=ZS-99VNndphiVN" class="social-link text-base"><i class="fa-brands fa-tiktok"></i></a>
         </div>
       </div>
     </transition>
