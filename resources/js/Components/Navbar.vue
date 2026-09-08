@@ -49,6 +49,17 @@
                 @mouseenter="openDropdown"
                 @mouseleave="closeDropdown"
               >
+                <!-- Ayurvedic Recipes -->
+                <Link 
+                  href="/#ayurvedic-recipes" 
+                  class="dropdown-item block px-6 py-3 text-xs font-semibold uppercase tracking-wider text-[#2b4b58] hover:text-[#E1B137] hover:bg-slate-50 transition-all"
+                  @click="closeDropdown"
+                >
+                  <span class="flex items-center justify-between">
+                    Ayurvedic Recipes
+                    <i class="fa-solid fa-arrow-right text-[10px] opacity-0 group-hover:opacity-100 transition-all transform translate-x-0 group-hover:translate-x-1"></i>
+                  </span>
+                </Link>
                 <!-- Wisdom Series -->
                 <Link 
                   href="/#wisdom-series" 
@@ -130,6 +141,18 @@
             
             <transition name="slide">
               <div v-if="isMobileDropdownOpen" class="mt-2 ml-4 space-y-1">
+                <!-- Ayurvedic Recipes -->
+                <Link 
+                  href="/#ayurvedic-recipes" 
+                  class="block py-3 px-2 text-sm text-slate-600 hover:text-[#E1B137] uppercase tracking-wider"
+                  @click="closeMenu"
+                >
+                  <span class="flex items-center justify-between">
+                    Ayurvedic Recipes
+                    <i class="fa-solid fa-arrow-right text-[10px] opacity-0 group-hover:opacity-100 transition-all"></i>
+                  </span>
+                </Link>
+                <!-- Wisdom Series -->
                 <Link 
                   href="/#wisdom-series" 
                   class="block py-3 px-2 text-sm text-slate-600 hover:text-[#E1B137] uppercase tracking-wider"
@@ -140,6 +163,7 @@
                     <i class="fa-solid fa-arrow-right text-[10px] opacity-0 group-hover:opacity-100 transition-all"></i>
                   </span>
                 </Link>
+                <!-- Recent Articles -->
                 <Link 
                   href="/#recent-articles" 
                   class="block py-3 px-2 text-sm text-slate-600 hover:text-[#E1B137] uppercase tracking-wider"
@@ -150,6 +174,7 @@
                     <i class="fa-solid fa-arrow-right text-[10px] opacity-0 group-hover:opacity-100 transition-all"></i>
                   </span>
                 </Link>
+                <!-- News & Update -->
                 <Link 
                   href="/#news-updates" 
                   class="block py-3 px-2 text-sm text-slate-600 hover:text-[#E1B137] uppercase tracking-wider"

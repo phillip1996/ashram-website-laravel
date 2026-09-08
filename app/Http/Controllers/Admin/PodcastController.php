@@ -29,7 +29,7 @@ class PodcastController extends Controller
             'description' => 'required|string',
             'date' => 'required|date',
             'duration' => 'required|string|max:20',
-            'duration_seconds' => 'required|integer',
+            'duration_seconds' => 'nullable|integer', // Changed to nullable
             'category' => 'required|string|max:255',
             'speaker_name' => 'required|string|max:255',
             'speaker_role' => 'required|string|max:255',
@@ -42,9 +42,12 @@ class PodcastController extends Controller
 
         $data = $request->only([
             'episode', 'title', 'description', 'date', 'duration',
-            'duration_seconds', 'category', 'speaker_name', 'speaker_role',
+            'category', 'speaker_name', 'speaker_role',
             'bookmarked', 'is_active'
         ]);
+
+        // ✅ Calculate duration_seconds from duration string
+        $data['duration_seconds'] = $this->convertDurationToSeconds($request->duration);
 
         // Store files
         if ($request->hasFile('thumbnail')) {
@@ -80,7 +83,7 @@ class PodcastController extends Controller
             'description' => 'required|string',
             'date' => 'required|date',
             'duration' => 'required|string|max:20',
-            'duration_seconds' => 'required|integer',
+            'duration_seconds' => 'nullable|integer', // Changed to nullable
             'category' => 'required|string|max:255',
             'speaker_name' => 'required|string|max:255',
             'speaker_role' => 'required|string|max:255',
@@ -93,9 +96,14 @@ class PodcastController extends Controller
 
         $data = $request->only([
             'episode', 'title', 'description', 'date', 'duration',
-            'duration_seconds', 'category', 'speaker_name', 'speaker_role',
+            'category', 'speaker_name', 'speaker_role',
             'bookmarked', 'is_active'
         ]);
+
+        // ✅ Calculate duration_seconds from duration string
+        if ($request->has('duration')) {
+            $data['duration_seconds'] = $this->convertDurationToSeconds($request->duration);
+        }
 
         // Handle file replacements
         if ($request->hasFile('thumbnail')) {
@@ -149,5 +157,23 @@ class PodcastController extends Controller
 
         $podcast->delete();
         return redirect()->route('admin.podcasts.index')->with('success', 'Podcast deleted.');
+    }
+
+    /**
+     * ✅ Helper method to convert HH:MM:SS to seconds
+     */
+    private function convertDurationToSeconds($duration)
+    {
+        $parts = explode(':', $duration);
+        
+        if (count($parts) === 3) {
+            // HH:MM:SS
+            return ($parts[0] * 3600) + ($parts[1] * 60) + $parts[2];
+        } elseif (count($parts) === 2) {
+            // MM:SS
+            return ($parts[0] * 60) + $parts[1];
+        }
+        
+        return 0; // fallback
     }
 }

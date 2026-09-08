@@ -18,7 +18,7 @@
         </div>
       </div>
 
-      <!-- ─── Description (WYSIWYG) ─── -->
+      <!-- ─── Description ─── -->
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
         <QuillEditor v-model="form.description" />
@@ -32,84 +32,89 @@
           <div v-if="form.errors.date" class="text-red-500 text-xs">{{ form.errors.date }}</div>
         </div>
         <div>
-          <label class="block text-sm font-medium text-gray-700">Duration (e.g. 48:22)</label>
-          <input v-model="form.duration" placeholder="48:22" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-[#E1B137] focus:border-[#E1B137]" />
+          <label class="block text-sm font-medium text-gray-700">Duration</label>
+          <input v-model="form.duration" placeholder="HH:MM:SS" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-[#E1B137] focus:border-[#E1B137]" />
           <div v-if="form.errors.duration" class="text-red-500 text-xs">{{ form.errors.duration }}</div>
         </div>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label class="block text-sm font-medium text-gray-700">Duration (seconds)</label>
-          <input v-model.number="form.duration_seconds" type="number" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-[#E1B137] focus:border-[#E1B137]" />
-          <div v-if="form.errors.duration_seconds" class="text-red-500 text-xs">{{ form.errors.duration_seconds }}</div>
-        </div>
-        <div>
           <label class="block text-sm font-medium text-gray-700">Category</label>
           <input v-model="form.category" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-[#E1B137] focus:border-[#E1B137]" />
           <div v-if="form.errors.category" class="text-red-500 text-xs">{{ form.errors.category }}</div>
         </div>
+        <div>
+          <!-- Empty -->
+        </div>
       </div>
 
-      <!-- ─── File Uploads with Existing Preview ─── -->
-
-      <!-- Thumbnail -->
+      <!-- ─── Thumbnail ─── -->
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-1">Current Thumbnail</label>
-        <div v-if="podcast.thumbnail" class="flex items-center gap-3 p-2 border rounded-md bg-slate-50">
-          <img :src="podcast.thumbnail" alt="Thumbnail" class="w-16 h-16 object-cover rounded" />
-          <span class="text-sm text-slate-500 truncate">{{ podcast.thumbnail }}</span>
+        <div v-if="currentThumbnail" class="flex items-center gap-3 p-2 border rounded-md bg-slate-50">
+          <img :src="currentThumbnail" alt="Thumbnail" class="w-24 h-24 object-cover rounded" />
         </div>
         <p v-else class="text-sm text-slate-400">No thumbnail set</p>
         <div class="mt-2">
           <label class="block text-sm font-medium text-gray-700">Replace Thumbnail</label>
-          <FileUpload
-            v-model="form.thumbnail_file"
+          <input
+            type="file"
             accept="image/*"
-            :max-size="5"
+            @change="handleThumbnailChange"
+            class="w-full border-gray-300 rounded-md shadow-sm focus:ring-[#E1B137] focus:border-[#E1B137]"
           />
           <div v-if="form.errors.thumbnail" class="text-red-500 text-xs">{{ form.errors.thumbnail }}</div>
         </div>
+        <div v-if="form.thumbnail_file" class="mt-2">
+          <p class="text-xs text-green-600">New thumbnail selected: {{ form.thumbnail_file.name }}</p>
+          <img :src="form.thumbnail_preview" alt="New thumbnail preview" class="mt-1 w-24 h-24 object-cover rounded border" />
+        </div>
       </div>
 
-      <!-- Audio -->
+      <!-- ─── Audio ─── -->
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-1">Current Audio</label>
         <div v-if="podcast.audio" class="flex items-center gap-3 p-2 border rounded-md bg-slate-50">
           <i class="fa-solid fa-file-audio text-2xl text-slate-400"></i>
           <span class="text-sm text-slate-500 truncate">{{ podcast.audio }}</span>
-          <audio v-if="podcast.audio" controls class="ml-auto h-8 w-40">
-            <source :src="podcast.audio" type="audio/mpeg" />
-          </audio>
         </div>
         <p v-else class="text-sm text-slate-400">No audio file</p>
         <div class="mt-2">
           <label class="block text-sm font-medium text-gray-700">Replace Audio</label>
-          <FileUpload
-            v-model="form.audio_file"
+          <input
+            type="file"
             accept="audio/*"
-            :max-size="50"
+            @change="handleAudioChange"
+            class="w-full border-gray-300 rounded-md shadow-sm focus:ring-[#E1B137] focus:border-[#E1B137]"
           />
           <div v-if="form.errors.audio" class="text-red-500 text-xs">{{ form.errors.audio }}</div>
         </div>
+        <div v-if="form.audio_file" class="mt-2">
+          <p class="text-xs text-green-600">New audio selected: {{ form.audio_file.name }}</p>
+        </div>
       </div>
 
-      <!-- Speaker Avatar -->
+      <!-- ─── Speaker Avatar ─── -->
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-1">Current Speaker Avatar</label>
-        <div v-if="podcast.speaker_avatar" class="flex items-center gap-3 p-2 border rounded-md bg-slate-50">
-          <img :src="podcast.speaker_avatar" alt="Avatar" class="w-12 h-12 rounded-full object-cover" />
-          <span class="text-sm text-slate-500 truncate">{{ podcast.speaker_avatar }}</span>
+        <div v-if="currentAvatar" class="flex items-center gap-3 p-2 border rounded-md bg-slate-50">
+          <img :src="currentAvatar" alt="Avatar" class="w-12 h-12 rounded-full object-cover" />
         </div>
         <p v-else class="text-sm text-slate-400">No avatar set</p>
         <div class="mt-2">
           <label class="block text-sm font-medium text-gray-700">Replace Avatar</label>
-          <FileUpload
-            v-model="form.avatar_file"
+          <input
+            type="file"
             accept="image/*"
-            :max-size="2"
+            @change="handleAvatarChange"
+            class="w-full border-gray-300 rounded-md shadow-sm focus:ring-[#E1B137] focus:border-[#E1B137]"
           />
           <div v-if="form.errors.speaker_avatar" class="text-red-500 text-xs">{{ form.errors.speaker_avatar }}</div>
+        </div>
+        <div v-if="form.avatar_file" class="mt-2">
+          <p class="text-xs text-green-600">New avatar selected: {{ form.avatar_file.name }}</p>
+          <img :src="form.avatar_preview" alt="New avatar preview" class="mt-1 w-12 h-12 rounded-full object-cover border" />
         </div>
       </div>
 
@@ -152,13 +157,17 @@
 
 <script setup>
 import AdminLayout from '@/Layouts/AdminLayout.vue'
-import { Link, useForm } from '@inertiajs/vue3'
-import FileUpload from '@/Components/Admin/FileUpload.vue'
+import { Link, useForm, router } from '@inertiajs/vue3'
 import QuillEditor from '@/Components/Admin/QuillEditor.vue'
 import { useToast } from '@/Composables/useToast'
+import { ref, computed } from 'vue'
 
 const { showToast } = useToast()
 const props = defineProps({ podcast: Object })
+
+// Track current images
+const currentThumbnail = ref(props.podcast.thumbnail || null)
+const currentAvatar = ref(props.podcast.speaker_avatar || null)
 
 const form = useForm({
   episode: props.podcast.episode,
@@ -166,30 +175,91 @@ const form = useForm({
   description: props.podcast.description,
   date: props.podcast.date,
   duration: props.podcast.duration,
-  duration_seconds: props.podcast.duration_seconds,
   category: props.podcast.category,
-  thumbnail: null,
   thumbnail_file: null,
-  audio: null,
+  thumbnail_preview: null,
   audio_file: null,
   speaker_name: props.podcast.speaker_name,
   speaker_role: props.podcast.speaker_role,
-  speaker_avatar: null,
   avatar_file: null,
+  avatar_preview: null,
   bookmarked: !!props.podcast.bookmarked,
   is_active: !!props.podcast.is_active,
 })
 
-const submit = () => {
-  if (form.thumbnail_file) form.thumbnail = form.thumbnail_file
-  if (form.audio_file) form.audio = form.audio_file
-  if (form.avatar_file) form.speaker_avatar = form.avatar_file
+// ─── File Handlers ───
+const handleThumbnailChange = (event) => {
+  const file = event.target.files[0]
+  if (file) {
+    form.thumbnail_file = file
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      form.thumbnail_preview = e.target.result
+    }
+    reader.readAsDataURL(file)
+  }
+}
 
-  form.put(`/admin/podcasts/${props.podcast.id}`, {
+const handleAudioChange = (event) => {
+  const file = event.target.files[0]
+  if (file) {
+    form.audio_file = file
+  }
+}
+
+const handleAvatarChange = (event) => {
+  const file = event.target.files[0]
+  if (file) {
+    form.avatar_file = file
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      form.avatar_preview = e.target.result
+    }
+    reader.readAsDataURL(file)
+  }
+}
+
+const submit = () => {
+  // Convert the form data to FormData for file uploads
+  const data = new FormData()
+  
+  data.append('episode', form.episode)
+  data.append('title', form.title)
+  data.append('description', form.description)
+  data.append('date', form.date)
+  data.append('duration', form.duration)
+  data.append('category', form.category)
+  data.append('speaker_name', form.speaker_name)
+  data.append('speaker_role', form.speaker_role)
+  data.append('bookmarked', form.bookmarked ? 1 : 0)
+  data.append('is_active', form.is_active ? 1 : 0)
+  
+  if (form.thumbnail_file) {
+    data.append('thumbnail', form.thumbnail_file)
+  }
+  if (form.audio_file) {
+    data.append('audio', form.audio_file)
+  }
+  if (form.avatar_file) {
+    data.append('speaker_avatar', form.avatar_file)
+  }
+
+  // ✅ Use PUT with FormData
+  router.post(`/admin/podcasts/${props.podcast.id}`, {
+    _method: 'PUT',
+    ...Object.fromEntries(data)
+  }, {
+    preserveScroll: true,
     onSuccess: () => {
-      showToast('Podcast updated successfully')
+      showToast('Podcast updated successfully!', 'success')
+      
+      // ✅ Full page reload to show fresh images
+      setTimeout(() => {
+        window.location.href = '/admin/podcasts'
+      }, 500)
     },
-    onError: () => {
+    onError: (errors) => {
+      console.error('Error updating podcast:', errors)
       showToast('Please check the form for errors', 'error')
     },
   })

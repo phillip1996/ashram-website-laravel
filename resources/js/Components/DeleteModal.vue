@@ -31,8 +31,10 @@
         <button
           @click="confirm"
           class="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded transition"
+          :disabled="isDeleting"
         >
-          Delete
+          <i v-if="isDeleting" class="fa-solid fa-spinner fa-spin mr-2"></i>
+          {{ isDeleting ? 'Deleting...' : 'Delete' }}
         </button>
       </div>
     </div>
@@ -41,14 +43,22 @@
 
 <script setup>
 import { useDeleteModal } from '@/Composables/useDeleteModal'
+import { ref } from 'vue'
 
 const { modalState, closeModal, confirmDelete } = useDeleteModal()
+const isDeleting = ref(false)
 
 const close = () => {
-  closeModal()
+  if (!isDeleting.value) {
+    closeModal()
+  }
 }
 
-const confirm = () => {
-  confirmDelete()
+const confirm = async () => {
+  if (isDeleting.value) return
+  
+  isDeleting.value = true
+  await confirmDelete()
+  isDeleting.value = false
 }
 </script>

@@ -4,31 +4,43 @@ import { router } from '@inertiajs/vue3'
 const modalState = ref({
   isOpen: false,
   id: null,
+  url: '',
   title: '',
   message: '',
-  route: '',
 })
 
-export const useDeleteModal = () => {
-  const openModal = (id, route, title = 'Delete Item', message = 'Are you sure you want to delete this item? This action cannot be undone.') => {
-    modalState.value.isOpen = true
-    modalState.value.id = id
-    modalState.value.title = title
-    modalState.value.message = message
-    modalState.value.route = route
+export function useDeleteModal() {
+  const openModal = (id, url, title, message) => {
+    modalState.value = {
+      isOpen: true,
+      id: id,
+      url: url,
+      title: title,
+      message: message,
+    }
   }
 
   const closeModal = () => {
     modalState.value.isOpen = false
-    modalState.value.id = null
-    modalState.value.route = ''
   }
 
   const confirmDelete = () => {
-    if (modalState.value.id && modalState.value.route) {
-      router.delete(modalState.value.route)
-      closeModal()
+    if (!modalState.value.url) {
+      console.error('No delete URL provided')
+      return
     }
+
+    router.delete(modalState.value.url, {
+      onSuccess: () => {
+        closeModal()
+        // Refresh the page to update the list
+        window.location.reload()
+      },
+      onError: (errors) => {
+        console.error('Delete failed:', errors)
+        alert('Failed to delete news item. Please try again.')
+      },
+    })
   }
 
   return {

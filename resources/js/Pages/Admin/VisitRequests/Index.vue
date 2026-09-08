@@ -117,16 +117,10 @@
                 <div class="text-xs text-slate-400">{{ request.preferred_time }}</div>
               </td>
               <td class="px-6 py-4">
-                <select
-                  @change="updateStatus(request, $event.target.value)"
-                  class="text-xs font-medium px-3 py-1 rounded-full border-0 focus:ring-2 focus:ring-[#E1B137] transition"
-                  :class="getStatusClass(request.status)"
-                >
-                  <option value="pending" :selected="request.status === 'pending'">Pending</option>
-                  <option value="confirmed" :selected="request.status === 'confirmed'">Confirmed</option>
-                  <option value="cancelled" :selected="request.status === 'cancelled'">Cancelled</option>
-                  <option value="completed" :selected="request.status === 'completed'">Completed</option>
-                </select>
+                <!-- Status Badge - Display only, no dropdown -->
+                <span class="text-xs font-medium px-3 py-1 rounded-full" :class="getStatusClass(request.status)">
+                  {{ request.status }}
+                </span>
               </td>
               <td class="px-6 py-4 text-right">
                 <div class="flex items-center justify-end gap-3">
@@ -204,22 +198,28 @@
               {{ selectedRequest.special_requests }}
             </div>
           </div>
-          <div class="flex justify-end gap-3 pt-4 border-t border-slate-100">
-            <select
-              @change="updateStatus(selectedRequest, $event.target.value)"
-              class="text-sm font-medium px-4 py-2 rounded border border-slate-200 focus:ring-2 focus:ring-[#E1B137] focus:border-[#E1B137] transition"
-            >
-              <option value="pending" :selected="selectedRequest.status === 'pending'">Pending</option>
-              <option value="confirmed" :selected="selectedRequest.status === 'confirmed'">Confirmed</option>
-              <option value="cancelled" :selected="selectedRequest.status === 'cancelled'">Cancelled</option>
-              <option value="completed" :selected="selectedRequest.status === 'completed'">Completed</option>
-            </select>
-            <button
-              @click="selectedRequest = null"
-              class="px-4 py-2 text-sm font-medium rounded bg-[#2b4b58] text-white hover:bg-[#1e3540] transition"
-            >
-              Close
-            </button>
+          
+          <!-- ✅ Status Update Dropdown - Only in Modal -->
+          <div class="pt-4 border-t border-slate-100">
+            <label class="text-xs font-semibold uppercase tracking-widest text-slate-400 block mb-2">
+              Update Status
+            </label>
+            <div class="flex items-center gap-3">
+              <select
+                @change="updateStatus(selectedRequest, $event.target.value)"
+                class="flex-1 text-sm font-medium px-4 py-2 rounded border border-slate-200 focus:ring-2 focus:ring-[#E1B137] focus:border-[#E1B137] transition bg-white"
+              >
+                <option value="pending" :selected="selectedRequest.status === 'pending'">Pending</option>
+                <option value="confirmed" :selected="selectedRequest.status === 'confirmed'">Confirmed</option>
+                <option value="cancelled" :selected="selectedRequest.status === 'cancelled'">Cancelled</option>
+              </select>
+              <button
+                @click="selectedRequest = null"
+                class="px-4 py-2 text-sm font-medium rounded bg-[#2b4b58] text-white hover:bg-[#1e3540] transition"
+              >
+                Close
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -230,13 +230,17 @@
 
 <script setup>
 import AdminLayout from '@/Layouts/AdminLayout.vue'
-import { Link, router } from '@inertiajs/vue3'
+import { router } from '@inertiajs/vue3'
 import { ref, computed } from 'vue'
 import DeleteModal from '@/Components/DeleteModal.vue'
 import { useDeleteModal } from '@/Composables/useDeleteModal'
 import { useToast } from '@/Composables/useToast'
 
-const props = defineProps({ requests: Array })
+const props = defineProps({ 
+  requests: Array,
+  flash: Object
+})
+
 const { openModal } = useDeleteModal()
 const { showToast } = useToast()
 
@@ -263,20 +267,34 @@ const getStatusClass = (status) => {
     pending: 'bg-amber-100 text-amber-700',
     confirmed: 'bg-emerald-100 text-emerald-700',
     cancelled: 'bg-red-100 text-red-700',
-    completed: 'bg-blue-100 text-blue-700',
   }
   return classes[status] || 'bg-slate-100 text-slate-700'
 }
 
 const updateStatus = (request, status) => {
+  const originalStatus = request.status
+  request.status = status
+
   router.patch(`/admin/visit-requests/${request.id}/status`, { status }, {
     preserveScroll: true,
     onSuccess: () => {
-      request.status = status
       if (selectedRequest.value && selectedRequest.value.id === request.id) {
         selectedRequest.value.status = status
       }
-      showToast(`Status updated to ${status}`, 'success')
+      
+      const statusMessages = {
+        pending: 'Request is now pending review.',
+        confirmed: '✓ Visit request confirmed! The visitor has been notified.',
+        cancelled: '✗ Visit request cancelled. The visitor has been notified.'
+      }
+      showToast(statusMessages[status] || `Status updated to ${status}`, 'success')
+    },
+    onError: () => {
+      request.status = originalStatus
+      if (selectedRequest.value && selectedRequest.value.id === request.id) {
+        selectedRequest.value.status = originalStatus
+      }
+      showToast('Failed to update status. Please try again.', 'error')
     }
   })
 }

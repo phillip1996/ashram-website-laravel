@@ -446,7 +446,7 @@
                     {{ news.title }}
                   </h3>
                   <p class="text-slate-400 text-sm mb-4 line-clamp-2">{{ news.description }}</p>
-                  <Link :href="news.link || '#'"
+                  <Link :href="'/news/' + news.id"
                     class="text-[#2b4b58] text-xs font-bold uppercase tracking-wider hover:text-[#E1B137] transition-colors inline-flex items-center gap-1.5">
                     Read More <i class="fa-solid fa-chevron-right text-[9px]"></i>
                   </Link>
@@ -529,29 +529,44 @@
               <p class="text-sm font-medium text-[#2b4b58] truncate">{{ currentPodcast.title }}</p>
               <p class="text-xs text-slate-400 truncate">{{ currentPodcast.speaker_name }}</p>
             </div>
-            <div class="flex items-center gap-2 md:gap-4">
-              <button @click="skipBackward" 
-                :aria-label="'Skip backward 15 seconds'"
-                class="text-slate-500 hover:text-[#2b4b58] transition text-sm md:text-base">
-                <i class="fa-solid fa-backward-step"></i>
+
+            <!-- Transport controls: rewind / play-pause / fast-forward -->
+            <div class="relative flex items-center gap-1 md:gap-2">
+              <transition name="fade">
+                <span v-if="skipFeedback"
+                  class="absolute -top-8 left-1/2 -translate-x-1/2 bg-[#2b4b58] text-white text-[11px] font-bold px-2.5 py-1 rounded-full shadow-lg pointer-events-none whitespace-nowrap">
+                  {{ skipFeedback }}
+                </span>
+              </transition>
+
+              <button @click="skipBackward"
+                aria-label="Rewind 15 seconds"
+                class="relative w-11 h-11 shrink-0 flex items-center justify-center rounded-full text-slate-500 hover:text-[#2b4b58] hover:bg-slate-100 active:scale-90 active:bg-slate-200 transition-all touch-manipulation">
+                <i class="fa-solid fa-rotate-left text-lg"></i>
+                <span class="absolute text-[8px] font-bold mt-0.5 leading-none">15</span>
               </button>
+
               <button @click="togglePlay"
                 :aria-label="isPlaying ? 'Pause' : 'Play'"
-                class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#E1B137] hover:bg-[#2b4b58] transition flex items-center justify-center text-white text-lg">
+                class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#E1B137] hover:bg-[#2b4b58] active:scale-95 transition flex items-center justify-center text-white text-lg shrink-0 touch-manipulation">
                 <i :class="isPlaying ? 'fa-solid fa-pause' : 'fa-solid fa-play'"></i>
               </button>
+
               <button @click="skipForward"
-                :aria-label="'Skip forward 30 seconds'"
-                class="text-slate-500 hover:text-[#2b4b58] transition text-sm md:text-base">
-                <i class="fa-solid fa-forward-step"></i>
+                aria-label="Fast forward 30 seconds"
+                class="relative w-11 h-11 shrink-0 flex items-center justify-center rounded-full text-slate-500 hover:text-[#2b4b58] hover:bg-slate-100 active:scale-90 active:bg-slate-200 transition-all touch-manipulation">
+                <i class="fa-solid fa-rotate-right text-lg"></i>
+                <span class="absolute text-[8px] font-bold mt-0.5 leading-none">30</span>
               </button>
-              <button @click="closePlayer" 
-                :aria-label="'Close player'"
-                class="text-slate-400 hover:text-red-500 transition ml-1">
+
+              <button @click="closePlayer"
+                aria-label="Close player"
+                class="w-9 h-9 shrink-0 flex items-center justify-center rounded-full text-slate-400 hover:text-red-500 hover:bg-slate-100 active:scale-90 transition-all touch-manipulation ml-1">
                 <i class="fa-solid fa-xmark"></i>
               </button>
             </div>
           </div>
+
           <div class="mt-2 flex items-center gap-3">
             <span class="text-xs text-slate-400 font-mono tabular-nums min-w-[40px]">{{ formatTime(currentTime) }}</span>
             <div
@@ -619,6 +634,12 @@ const props = defineProps({
   indianExpoImg: String,
 })
 
+// ── Toast (simple) ──
+const showToast = (message, type = 'info') => {
+  // You can replace this with your actual toast implementation
+  console.log(`[${type}] ${message}`)
+}
+
 // ── Helper Functions ──
 const formatDate = (date) => {
   if (!date) return ''
@@ -644,6 +665,47 @@ const handleImageError = (event) => {
   event.target.src = '/img/placeholder-recipe.jpg'
 }
 
+// ── ✅ BOOKMARK MANAGEMENT (LocalStorage) ──
+const bookmarks = ref({})
+
+// Load bookmarks from localStorage
+const loadBookmarks = () => {
+  try {
+    const saved = localStorage.getItem('ashram_podcast_bookmarks')
+    if (saved) {
+      bookmarks.value = JSON.parse(saved)
+    }
+  } catch (e) {
+    console.warn('Failed to load bookmarks:', e)
+    bookmarks.value = {}
+  }
+}
+
+// Save bookmarks to localStorage
+const saveBookmarks = () => {
+  try {
+    localStorage.setItem('ashram_podcast_bookmarks', JSON.stringify(bookmarks.value))
+  } catch (e) {
+    console.warn('Failed to save bookmarks:', e)
+  }
+}
+
+// Toggle bookmark for a podcast
+const toggleBookmark = (podcast) => {
+  if (!podcast) return
+  
+  if (bookmarks.value[podcast.id]) {
+    delete bookmarks.value[podcast.id]
+    podcast.bookmarked = false
+    showToast('Bookmark removed', 'info')
+  } else {
+    bookmarks.value[podcast.id] = true
+    podcast.bookmarked = true
+    showToast('Bookmarked! ✓', 'success')
+  }
+  saveBookmarks()
+}
+
 // ── Podcast Player ──
 const showAllEpisodes = ref(false)
 const currentPlaying = ref(null)
@@ -657,6 +719,20 @@ const isLoading = ref(false)
 const bufferedProgress = ref(0)
 const currentDuration = ref(0)
 const isDragging = ref(false)
+
+// ── Skip forward/backward config + tap feedback ──
+const SKIP_BACKWARD_SECONDS = 15
+const SKIP_FORWARD_SECONDS = 30
+const skipFeedback = ref(null)
+let skipFeedbackTimeout = null
+
+const showSkipFeedback = (label) => {
+  skipFeedback.value = label
+  clearTimeout(skipFeedbackTimeout)
+  skipFeedbackTimeout = setTimeout(() => {
+    skipFeedback.value = null
+  }, 700)
+}
 
 const safePlaybackProgress = computed(() => {
   const p = playbackProgress.value
@@ -746,22 +822,23 @@ const closePlayer = () => {
   playbackProgress.value = 0
   bufferedProgress.value = 0
   isDragging.value = false
+  skipFeedback.value = null
+  clearTimeout(skipFeedbackTimeout)
 }
 
 const skipBackward = () => {
-  if (audioElement.value) {
-    audioElement.value.currentTime = Math.max(0, audioElement.value.currentTime - 15)
-  }
+  if (!audioElement.value) return
+  audioElement.value.currentTime = Math.max(0, audioElement.value.currentTime - SKIP_BACKWARD_SECONDS)
+  showSkipFeedback(`-${SKIP_BACKWARD_SECONDS}s`)
 }
 
 const skipForward = () => {
-  if (audioElement.value) {
-    audioElement.value.currentTime = Math.min(audioElement.value.duration || 0, audioElement.value.currentTime + 30)
-  }
-}
-
-const toggleBookmark = (podcast) => {
-  podcast.bookmarked = !podcast.bookmarked
+  if (!audioElement.value) return
+  const duration = audioElement.value.duration
+  const hasValidDuration = duration && isFinite(duration) && duration > 0
+  const target = audioElement.value.currentTime + SKIP_FORWARD_SECONDS
+  audioElement.value.currentTime = hasValidDuration ? Math.min(duration, target) : target
+  showSkipFeedback(`+${SKIP_FORWARD_SECONDS}s`)
 }
 
 const updateProgress = () => {
@@ -961,6 +1038,16 @@ onMounted(() => {
   initAOS()
   initAudio()
   document.addEventListener('keydown', handleKeydown)
+  
+  // ✅ Load bookmarks and apply to podcasts
+  loadBookmarks()
+  if (props.podcasts) {
+    props.podcasts.forEach(podcast => {
+      if (bookmarks.value[podcast.id]) {
+        podcast.bookmarked = true
+      }
+    })
+  }
 })
 
 onUnmounted(() => {
@@ -974,6 +1061,7 @@ onUnmounted(() => {
   document.removeEventListener('mouseup', onMouseUp)
   document.removeEventListener('touchmove', onTouchMove)
   document.removeEventListener('touchend', onTouchEnd)
+  clearTimeout(skipFeedbackTimeout)
   AOS.refresh()
 })
 </script>
@@ -1008,6 +1096,15 @@ onUnmounted(() => {
 .player-up-enter-from,
 .player-up-leave-to {
   transform: translate(-50%, 120%);
+  opacity: 0;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.25s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
   opacity: 0;
 }
 

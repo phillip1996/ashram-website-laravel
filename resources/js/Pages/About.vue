@@ -214,24 +214,6 @@
               </div>
             </div>
 
-            <div class="flex items-center gap-4 pt-2">
-              <span class="text-slate-400 text-[10px] font-bold uppercase tracking-widest font-display">Connect</span>
-              <div class="w-6 h-px bg-slate-200"></div>
-              <div class="flex gap-2">
-                <a href="https://linkedin.com/in/swamiatmananda" target="_blank"
-                  class="w-10 h-10 border border-slate-200 flex items-center justify-center text-slate-400 hover:bg-[#0077B5] hover:border-[#0077B5] hover:text-white transition-all text-sm">
-                  <i class="fa-brands fa-linkedin-in"></i>
-                </a>
-                <a href="https://twitter.com/SwamiAtmananda" target="_blank"
-                  class="w-10 h-10 border border-slate-200 flex items-center justify-center text-slate-400 hover:bg-[#1DA1F2] hover:border-[#1DA1F2] hover:text-white transition-all text-sm">
-                  <i class="fa-brands fa-twitter"></i>
-                </a>
-                <a href="mailto:swami@lekkiashram.org"
-                  class="w-10 h-10 border border-slate-200 flex items-center justify-center text-slate-400 hover:bg-[#2b4b58] hover:border-[#2b4b58] hover:text-white transition-all text-sm">
-                  <i class="fa-solid fa-envelope"></i>
-                </a>
-              </div>
-            </div>
           </div>
 
           <div class="w-full lg:w-5/12 relative order-1 lg:order-2">
@@ -293,10 +275,6 @@
                 <a v-if="t.twitter" :href="t.twitter" target="_blank"
                   class="w-8 h-8 border border-slate-200 flex items-center justify-center text-slate-400 hover:bg-[#1DA1F2] hover:border-[#1DA1F2] hover:text-white transition-all text-xs">
                   <i class="fa-brands fa-twitter"></i>
-                </a>
-                <a :href="`mailto:${t.email}`"
-                  class="w-8 h-8 border border-slate-200 flex items-center justify-center text-slate-400 hover:bg-[#2b4b58] hover:border-[#2b4b58] hover:text-white transition-all text-xs">
-                  <i class="fa-solid fa-envelope"></i>
                 </a>
               </div>
             </div>
@@ -702,31 +680,16 @@ const trustees = [
     name: 'Mrs. Julie Ann Van-Vleck',
     bio: 'Former UNEP consultant with 20+ years in environmental policy and sustainable development.',
     image: '/img/trustees/Julie Ann.png',
-    expertise: 'Environmental Policy',
-    role: 'Chairperson',
-    linkedin: 'https://linkedin.com',
-    twitter: 'https://twitter.com',
-    email: 'julie@lekkiashram.org'
   },
   {
     name: 'Prof. Habeeb Abiodun Sanni',
     bio: 'Head of Philosophy at University of Lagos, specializing in Eastern philosophy and consciousness.',
     image: '/img/trustees/Habeeb Sanni.jpg',
-    expertise: 'Philosophy',
-    role: 'Trustee',
-    linkedin: 'https://linkedin.com',
-    twitter: 'https://twitter.com',
-    email: 'habeeb@lekkiashram.org'
   },
   {
     name: 'Dr. Narendra Nath Datta',
     bio: 'CFO of Green Energy Solutions, bringing financial expertise to sustainable initiatives.',
     image: '/img/trustees/Narendra Datta.png',
-    expertise: 'Finance',
-    role: 'Treasurer',
-    linkedin: 'https://linkedin.com',
-    twitter: 'https://twitter.com',
-    email: 'narendra@lekkiashram.org'
   },
 ]
 

@@ -17,4 +17,17 @@ class NewsController extends Controller
             'newsItems' => $newsItems,
         ]);
     }
+
+    /**
+     * Display a single news item.
+     * Route: GET /news/{id}  ->  name: news.show
+     */
+    public function show($id)
+    {
+        $newsItem = NewsItem::where('is_active', true)->findOrFail($id);
+
+        return Inertia::render('News/Show', [
+            'newsItem' => $newsItem,
+        ]);
+    }
 }

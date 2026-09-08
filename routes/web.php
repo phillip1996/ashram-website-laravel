@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\SubscriberController;
 use App\Http\Controllers\Admin\VisitRequestController;
 use App\Http\Controllers\Admin\AyurvedicRecipeController as AdminAyurvedicRecipeController;
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\AudioStreamController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NewsController;
@@ -79,6 +80,11 @@ Route::post('/visit-requests', [PublicVisitRequestController::class, 'store'])->
 // ── Podcast Listen Counter ──
 Route::post('/podcasts/{podcast}/listen', [PodcastController::class, 'incrementListen'])->name('podcasts.listen');
 
+// ── Audio Streaming (Range-request-capable, fixes seek/fast-forward/rewind) ──
+Route::get('/media/audio/{path}', [AudioStreamController::class, 'stream'])
+    ->where('path', '.*')
+    ->name('audio.stream');
+
 // ─────────────────────────────────────────────
 // PHILOSOPHY PAGES
 // ─────────────────────────────────────────────
@@ -126,6 +132,11 @@ Route::prefix('news')->name('news.')->group(function () {
     Route::get('/meditation-retreat-2026', fn() => Inertia::render('News/MeditationRetreat'))->name('meditation-retreat');
     Route::get('/mangrove-restoration', fn() => Inertia::render('News/MangroveRestoration'))->name('mangrove-restoration');
     Route::get('/philosophy-lectures', fn() => Inertia::render('News/PhilosophyLectures'))->name('philosophy-lectures');
+
+    // Dynamic show route — must stay AFTER the static named routes above,
+    // otherwise it would swallow requests meant for them (Laravel matches
+    // routes top-to-bottom, and {id} matches any single path segment).
+    Route::get('/{id}', [NewsController::class, 'show'])->name('show');
 });
 
 // ─────────────────────────────────────────────
@@ -139,22 +150,32 @@ Route::post('/subscribe', [SubscribeController::class, 'store'])->name('subscrib
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [AdminController::class, 'dashboard'])->name('dashboard');
 
+    // ── Podcasts ──
     Route::resource('podcasts', AdminPodcastController::class);
+
+    // ── Articles ──
     Route::resource('articles', AdminArticleController::class);
+
+    // ── Partners ──
     Route::resource('partners', PartnerController::class);
+
+    // ── News ──
     Route::resource('news', NewsItemController::class)->parameters(['news' => 'newsItem']);
 
+    // ── Subscribers ──
     Route::resource('subscribers', SubscriberController::class)->only(['index', 'destroy']);
     Route::patch('/subscribers/{subscriber}/toggle', [SubscriberController::class, 'toggleActive'])->name('subscribers.toggle');
 
+    // ── Contact Messages ──
     Route::resource('contact', ContactMessageController::class)->only(['index', 'destroy']);
     Route::patch('/contact/{message}/toggle-read', [ContactMessageController::class, 'toggleRead'])->name('contact.toggle-read');
 
+    // ── Visit Requests ──
     Route::resource('visit-requests', VisitRequestController::class)->only(['index', 'destroy']);
+    // ✅ This is the route your Vue component calls
     Route::patch('/visit-requests/{visitRequest}/status', [VisitRequestController::class, 'updateStatus'])->name('visit-requests.update-status');
 
     // ── Ayurvedic Recipes (Admin CRUD) ──
-    // ✅ Added parameters mapping to use {recipe} in URLs
     Route::resource('ayurvedic-recipes', AdminAyurvedicRecipeController::class)
         ->except(['show'])
         ->parameters(['ayurvedic-recipes' => 'recipe']);

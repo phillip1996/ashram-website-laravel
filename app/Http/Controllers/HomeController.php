@@ -32,7 +32,9 @@ class HomeController extends Controller
         // ── Dynamic content ──
         $podcasts = Podcast::where('is_active', true)->latest()->get();
         $partners = Partner::where('is_active', true)->get();
-        $newsItems = NewsItem::where('is_active', true)->latest()->take(3)->get();
+        
+        // ✅ Fetch ALL active news items (not just 3)
+        $newsItems = NewsItem::where('is_active', true)->latest()->get();
 
         // ── Featured articles ──
         $featuredArticles = Article::where('is_active', true)
@@ -47,20 +49,13 @@ class HomeController extends Controller
             ->latest()
             ->get();
 
-        // ── ✅ ALL active Ayurvedic Recipes with gallery eager loading ──
-        // 'gallery' is eager-loaded because the model's `gallery_images`
-        // accessor (via $appends) touches this relation on every recipe
-        // during serialization. Without eager-loading, this either fires
-        // one query per recipe or, if lazy loading is disallowed in
-        // AppServiceProvider, throws and takes down the whole page —
-        // hero slider included, since it's all one Inertia response.
+        // ── Ayurvedic Recipes ──
         $recipes = AyurvedicRecipe::with('gallery')
             ->active()
             ->latest()
-            ->take(3) // Show first 3 on home page
+            ->take(3)
             ->get();
 
-        // ── Total active recipes (for "View All" button) ──
         $totalRecipesCount = AyurvedicRecipe::active()->count();
 
         // ── Static content ──

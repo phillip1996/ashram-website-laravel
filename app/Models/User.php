@@ -22,6 +22,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role', // ✅ Add this line
     ];
 
     /**
@@ -45,5 +46,25 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Check if the user is an admin.
+     * 
+     * @return bool
+     */
+    public function isAdmin(): bool
+    {
+        // Option 1: Check by email (simplest for now)
+        if ($this->email === 'admin@lekkiashram.com') {
+            return true;
+        }
+
+        // Option 2: Check by role field (if you have one)
+        if (isset($this->role) && in_array($this->role, ['admin', 'super_admin'])) {
+            return true;
+        }
+
+        return false;
     }
 }

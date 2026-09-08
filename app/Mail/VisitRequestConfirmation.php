@@ -14,11 +14,11 @@ class VisitRequestConfirmation extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $request;
+    public $visitRequest;
 
-    public function __construct(VisitRequest $request)
+    public function __construct(VisitRequest $visitRequest)
     {
-        $this->request = $request;
+        $this->visitRequest = $visitRequest;
     }
 
     public function envelope(): Envelope
@@ -33,11 +33,15 @@ class VisitRequestConfirmation extends Mailable
         return new Content(
             view: 'emails.visit-request-confirmation',
             with: [
-                'name' => $this->request->name,
-                'visitType' => $this->request->visit_type,
-                'date' => $this->request->preferred_date->format('F j, Y'),
-                'time' => $this->request->preferred_time,
-                'guests' => $this->request->guests,
+                'name' => $this->visitRequest->name,
+                'visitType' => $this->visitRequest->visit_type,
+                'date' => $this->visitRequest->preferred_date instanceof \Carbon\Carbon 
+                    ? $this->visitRequest->preferred_date->format('F j, Y') 
+                    : \Carbon\Carbon::parse($this->visitRequest->preferred_date)->format('F j, Y'),
+                'time' => $this->visitRequest->preferred_time,
+                'guests' => $this->visitRequest->guests,
+                'phone' => $this->visitRequest->phone,
+                'requests' => $this->visitRequest->special_requests,
             ],
         );
     }
