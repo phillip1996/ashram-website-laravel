@@ -1,5 +1,11 @@
 <template>
   <main class="page-wrapper font-body">
+       <Head>
+        <title>Contact | The Lekki Ashram</title>
+        <meta name="description" content="Get in touch with The Lekki Ashram. Reach out to explore retreats, workshops, or mindful programs." />
+        <meta property="og:title" content="Contact | The Lekki Ashram" />
+        <meta property="og:description" content="Get in touch with The Lekki Ashram. Reach out to explore retreats, workshops, or mindful programs." />
+    </Head>
 
     <!-- =====================================================
          HERO — Parallax

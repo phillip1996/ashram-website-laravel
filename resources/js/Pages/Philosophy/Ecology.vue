@@ -51,12 +51,6 @@
 
       <!-- CTA BUTTONS -->
       <div class="flex flex-col sm:flex-row gap-6 mt-10">
-        <Link
-          href="/support/conservation"
-          class="px-8 py-4 bg-[#E1B137] text-white uppercase text-[11px] tracking-[0.2em] font-bold hover:bg-[#2b4b58] transition text-center"
-        >
-          Support Conservation
-        </Link>
 
         <Link
           href="/"

@@ -1,5 +1,11 @@
 <template>
   <main class="page-wrapper font-body">
+        <Head>
+      <title>About | The Lekki Ashram</title>
+      <meta name="description" content="Discover the story and mission behind The Lekki Ashram - a sanctuary for higher living rooted in Advaita philosophy and ecological stewardship." />
+      <meta property="og:title" content="About | The Lekki Ashram" />
+      <meta property="og:description" content="Discover the story and mission behind The Lekki Ashram - a sanctuary for higher living rooted in Advaita philosophy and ecological stewardship." />
+    </Head>
 
     <!-- =====================================================
          HERO — Parallax
@@ -56,13 +62,9 @@
             </p>
 
             <div class="flex flex-wrap gap-4 hero-item" style="animation-delay:.58s">
-              <Link href="/programs"
-                class="inline-flex items-center gap-3 bg-[#E1B137] text-[#0d1e26] px-8 py-4 font-display font-bold text-[11px] uppercase tracking-[0.2em] hover:bg-white transition-all duration-300 group">
-                Explore Programs
-                <i class="fa-solid fa-arrow-right-long group-hover:translate-x-1 transition-transform text-xs"></i>
-              </Link>
               <button @click="openModal"
-                class="inline-flex items-center gap-3 border border-white/30 text-white px-8 py-4 font-display font-bold text-[11px] uppercase tracking-[0.2em] hover:border-[#E1B137] hover:text-[#E1B137] transition-all duration-300">
+                class="inline-flex items-center gap-3 bg-[#E1B137] text-[#0d1e26] px-8 py-4 font-display font-bold text-[11px] uppercase tracking-[0.2em] hover:bg-white transition-all duration-300 group">
+                <i class="fa-solid fa-calendar-check"></i>
                 Visit the Ashram
               </button>
             </div>
@@ -121,7 +123,7 @@
             </div>
 
             <p class="text-slate-500 text-sm md:text-base leading-relaxed">
-              Founded on the principles of Advaita and natural preservation, The Lekki Ashram is more than a center — it is a movement toward human evolution, where ecological stewardship meets philosophical clarity.
+              Guided by Advaita and grounded in the preservation of nature, The Lekki Ashram is more than a sanctuary. It is a movement for human evolution, where ecological wisdom and philosophical depth walk hand in hand.
             </p>
 
             <div class="grid grid-cols-2 gap-4 md:gap-6 py-6 border-y border-slate-100">
@@ -658,14 +660,14 @@ const submitForm = () => {
 const stats = [
   { value: '15+',  label: 'Years of Service'  },
   { value: '500+', label: 'Retreats Conducted' },
-  { value: '6',    label: 'Trustees'           },
+  { value: '3',    label: 'Trustees'           },
   { value: '4',    label: 'Global Partners'    }
 ]
 
 const principles = [
-  { icon: 'fa-solid fa-infinity', title: 'Non-Dual Awareness',    description: 'Recognizing the indivisible nature of existence — where self and world are expressions of one unified reality.' },
+  { icon: 'fa-solid fa-infinity', title: 'Non-Dual Awareness',    description: 'Recognizing the indivisible nature of existence, where self and world are expressions of one unified reality.' },
   { icon: 'fa-solid fa-eye',      title: 'Conscious Inquiry',     description: 'Cultivating clarity through disciplined reflection, philosophical study, and courageous questioning.' },
-  { icon: 'fa-solid fa-seedling', title: 'Ecological Compassion', description: 'Acting from unity — nurturing humanity and nature as sacred dimensions of one evolving consciousness.' }
+  { icon: 'fa-solid fa-seedling', title: 'Ecological Compassion', description: 'Acting from unity, nurturing humanity and nature as sacred dimensions of one evolving consciousness.' }
 ]
 
 const contributions = [

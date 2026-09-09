@@ -1,6 +1,30 @@
 <template>
   <div class="page-wrapper font-montserrat" v-cloak>
 
+    <Head>
+      <title>The Lekki Ashram - Art of Living Center</title>
+      <meta name="description" content="An apolitical civil society group dedicated to resolving the mysteries of life through nature conservation, Advaita philosophy, and human evolution." />
+      
+      <!-- Open Graph Tags -->
+      <meta property="og:title" content="The Lekki Ashram - Art of Living Center" />
+      <meta property="og:description" content="An apolitical civil society group dedicated to resolving the mysteries of life through nature conservation, Advaita philosophy, and human evolution." />
+      <meta property="og:type" content="website" />
+      <meta property="og:url" content="{{ url()->current() }}" />
+      <meta property="og:image" content="{{ asset('img/og-image.jpg') }}" />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
+      <meta property="og:site_name" content="The Lekki Ashram" />
+      
+      <!-- Twitter Card -->
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content="The Lekki Ashram - Art of Living Center" />
+      <meta name="twitter:description" content="An apolitical civil society group dedicated to resolving the mysteries of life through nature conservation, Advaita philosophy, and human evolution." />
+      <meta name="twitter:image" content="{{ asset('img/og-image.jpg') }}" />
+      
+      <!-- Canonical URL -->
+      <link rel="canonical" href="{{ url()->current() }}" />
+    </Head>
+
     <HeroSlider :slides="heroSlides" />
 
     <!-- =========================================================
@@ -18,7 +42,7 @@
             Six Pillars of <em class="not-italic text-[#E1B137]">Transformation</em>
           </h2>
           <p class="text-slate-500 mt-4 max-w-xl mx-auto text-sm leading-relaxed">
-            Each pillar is a doorway — into stillness, into nature, into the self.
+            Each pillar is a doorway into stillness, into nature, into the self.
           </p>
         </div>
 
@@ -26,19 +50,32 @@
           <div v-for="(pillar, i) in pillars" :key="i"
             class="group relative bg-white border border-slate-100 p-8 hover:shadow-xl hover:-translate-y-1 transition-all duration-400 overflow-hidden">
             <div class="absolute bottom-0 left-0 h-0.5 w-0 bg-[#E1B137] group-hover:w-full transition-all duration-500"></div>
-            <div class="w-14 h-14 rounded-full flex items-center justify-center mb-6 transition-colors duration-300"
-              :class="i % 2 === 0 ? 'bg-[#E1B137]/10 group-hover:bg-[#E1B137]' : 'bg-[#2b4b58]/10 group-hover:bg-[#2b4b58]'">
-              <svg v-if="pillar.icon === 'custom-swan'"
-                class="w-6 h-6 transition-colors duration-300"
-                :class="i % 2 === 0 ? 'text-[#E1B137] group-hover:text-white' : 'text-[#2b4b58] group-hover:text-white'"
+            <div class="w-14 h-14 rounded-full flex items-center justify-center mb-6 transition-colors duration-300 relative"
+              :class="i % 2 === 0 ? 'bg-[#E1B137]/20 group-hover:bg-[#E1B137]' : 'bg-[#2b4b58]/20 group-hover:bg-[#2b4b58]'">
+              
+              <!-- ✅ Custom Image Icon (for Advaita) -->
+              <img 
+                v-if="pillar.icon === 'custom-image' && pillar.icon_image"
+                :src="'/' + pillar.icon_image" 
+                :alt="pillar.title"
+                class="w-8 h-8 object-contain transition-colors duration-300 relative z-10"
+              />
+              
+              <!-- Custom SVG Swan - with better contrast -->
+              <svg v-else-if="pillar.icon === 'custom-swan'"
+                class="w-6 h-6 transition-colors duration-300 relative z-10"
+                :class="i % 2 === 0 ? 'text-[#1a1a1a] group-hover:text-white' : 'text-[#1a1a1a] group-hover:text-white'"
                 viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <ellipse cx="10.5" cy="16.5" rx="7.5" ry="4.2" fill="currentColor"/>
                 <path d="M15.5 18C13.8 18 12.5 16.8 12.5 15.2C12.5 13.9 13.3 12.8 14.4 12.3C13 11.9 12 10.6 12 9.1C12 7.9 12.7 6.8 13.7 6.2C13 5.7 12.6 4.9 12.6 4C12.6 3.3 12.9 2.7 13.3 2.2C14.2 2.6 14.8 3.5 14.8 4.5C14.8 4.9 14.7 5.3 14.5 5.6C15.9 5.9 17 7.2 17 8.7C17 9.9 16.3 11 15.3 11.5C16.6 11.8 17.6 12.9 17.7 14.3C17.8 15 17.6 15.6 17.2 16.1C18.1 16.3 18.8 17 19 17.9C17.9 18.3 16.6 18.3 15.5 18Z" fill="currentColor"/>
                 <circle cx="14" cy="4.6" r="0.55" fill="#f8f7f4"/>
                 <path d="M13.4 3.3L11.6 3.7L13.1 4.6Z" fill="currentColor"/>
               </svg>
-              <i v-else :class="[pillar.icon, 'text-xl transition-colors duration-300',
-                i % 2 === 0 ? 'text-[#E1B137] group-hover:text-white' : 'text-[#2b4b58] group-hover:text-white']"></i>
+              
+              <!-- Font Awesome Icons (all other pillars) -->
+              <i v-else :class="[pillar.icon, 'text-xl transition-colors duration-300 relative z-10',
+                i % 2 === 0 ? 'text-[#E1B137] group-hover:text-white' : 'text-[#2b4b58] group-hover:text-white']">
+              </i>
             </div>
             <h3 class="text-[#2b4b58] font-serif text-xl font-medium mb-3 group-hover:text-[#E1B137] transition-colors">
               {{ pillar.title }}
@@ -66,7 +103,7 @@
             Experience that <em class="not-italic text-[#E1B137]">Shaped Us</em>
           </h2>
           <p class="text-white/50 mt-4 max-w-xl mx-auto text-sm leading-relaxed">
-            Our journey reflects deliberate growth — defined by ecological stewardship, philosophical clarity, and institutional responsibility.
+            Our journey reflects deliberate growth, defined by ecological stewardship, philosophical clarity, and institutional responsibility.
           </p>
         </div>
 

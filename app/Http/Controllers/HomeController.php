@@ -33,7 +33,7 @@ class HomeController extends Controller
         $podcasts = Podcast::where('is_active', true)->latest()->get();
         $partners = Partner::where('is_active', true)->get();
         
-        // ✅ Fetch ALL active news items (not just 3)
+        // Fetch ALL active news items (not just 3)
         $newsItems = NewsItem::where('is_active', true)->latest()->get();
 
         // ── Featured articles ──

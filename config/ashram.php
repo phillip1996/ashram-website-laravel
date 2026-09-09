@@ -17,7 +17,8 @@ return [
     */
     'pillars' => [
         [
-            'icon' => 'custom-swan',
+            'icon' => 'custom-image',
+            'icon_image' => 'img/pillars/advaita.svg', 
             'title' => 'Advaita & Self-Discovery',
             'description' => 'Resolving the mysteries of life through the philosophical framework of Advaita and contemplation.',
         ],

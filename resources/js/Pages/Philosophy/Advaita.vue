@@ -53,12 +53,6 @@
       <!-- CTA -->
       <div class="pt-10 flex flex-col sm:flex-row gap-4 sm:gap-6">
 
-        <Link
-          href="/support/meditation-programs"
-          class="px-8 py-4 bg-[#E1B137] text-white uppercase text-[11px] tracking-[0.2em] font-bold hover:bg-[#2b4b58] transition text-center"
-        >
-          Join Meditation
-        </Link>
 
         <Link
           href="/"
