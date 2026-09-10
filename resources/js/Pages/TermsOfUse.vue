@@ -99,7 +99,9 @@ const sections = [
   {
     title: '2. Use of Content',
     content: `
-      <p>All content on this website – including text, images, graphics, and logos – is the property of The Lekki Ashram and is protected by copyright and intellectual property laws. You may not reproduce, distribute, or create derivative works without prior written permission.</p>
+      <p>All original content on this website, including text, graphics, and logos, is the property of The Lekki Ashram and is protected by copyright and intellectual property laws. Some images used on this site are sourced from free stock photo platforms and remain the property of their respective owners.
+
+You may not reproduce, distribute, or create derivative works from our original content without prior written permission.</p>
     `
   },
   {

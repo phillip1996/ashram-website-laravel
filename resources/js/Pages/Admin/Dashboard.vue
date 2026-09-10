@@ -9,7 +9,7 @@
         <div class="flex items-center gap-4">
           <div>
             <h1 class="text-2xl font-serif font-medium text-[#2b4b58]">Dashboard</h1>
-            <p class="text-slate-500 text-sm mt-0.5">Welcome back — here's what's happening today.</p>
+            <p class="text-slate-500 text-sm mt-0.5">Welcome back. Here's what's happening today.</p>
           </div>
         </div>
 

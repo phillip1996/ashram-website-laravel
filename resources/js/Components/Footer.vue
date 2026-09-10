@@ -28,7 +28,7 @@
               <li><Link href="/" class="hover:text-[#E1B137] transition-colors inline-block">Home</Link></li>
               <li><Link href="/about" class="hover:text-[#E1B137] transition-colors inline-block">About</Link></li>
               <li><Link href="/#recent-articles" class="hover:text-[#E1B137] transition-colors inline-block">Insights</Link></li>
-              <li><Link href="/news" class="hover:text-[#E1B137] transition-colors inline-block">News</Link></li>
+              <li><Link href="/#news-updates" class="hover:text-[#E1B137] transition-colors inline-block">News</Link></li>
               <li><Link href="/contact" class="hover:text-[#E1B137] transition-colors inline-block">Contact</Link></li>
             </ul>
           </div>

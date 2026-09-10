@@ -143,46 +143,11 @@
               </div>
             </div>
 
-            <Link href="/about"
+            <button @click="openPathPanel"
               class="inline-flex items-center gap-3 bg-[#2b4b58] text-white px-8 py-4 text-[11px] font-bold uppercase tracking-[0.2em] hover:bg-[#E1B137] transition-all duration-300 group">
               Explore Our Path
               <i class="fa-solid fa-arrow-right-long group-hover:translate-x-1 transition-transform"></i>
-            </Link>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SECTION 2 — CORE PRINCIPLES -->
-    <section class="py-20 md:py-36 bg-[#2b4b58] relative overflow-hidden">
-      <div class="absolute inset-0 opacity-[0.04]"
-        style="background-image: radial-gradient(circle, white 1px, transparent 1px); background-size: 28px 28px;"></div>
-
-      <div class="relative max-w-6xl mx-auto px-6 md:px-12">
-        <div class="text-center max-w-2xl mx-auto mb-16 md:mb-20">
-          <div class="flex items-center justify-center gap-3 mb-5">
-            <div class="w-8 h-px bg-[#E1B137]"></div>
-            <span class="text-[#E1B137] text-[10px] font-bold uppercase tracking-[0.35em] font-display">Our Foundation</span>
-            <div class="w-8 h-px bg-[#E1B137]"></div>
-          </div>
-          <h2 class="font-display text-3xl md:text-5xl text-white mb-5">
-            Core <em class="not-italic text-[#E1B137]">Principles</em>
-          </h2>
-          <p class="text-white/50 text-sm md:text-base leading-relaxed">
-            Rooted in Advaita philosophy and ecological harmony — principles that guide our collective growth.
-          </p>
-        </div>
-
-        <div class="grid md:grid-cols-3 gap-6">
-          <div v-for="(p, i) in principles" :key="i"
-            class="group relative bg-white/5 border border-white/10 p-8 md:p-10 hover:border-[#E1B137]/50 hover:bg-white/8 transition-all duration-500 overflow-hidden">
-            <div class="absolute bottom-0 left-0 h-0.5 w-0 bg-[#E1B137] group-hover:w-full transition-all duration-500"></div>
-            <div class="w-14 h-14 md:w-16 md:h-16 flex items-center justify-center mb-6 border transition-all duration-300"
-              :class="i === 1 ? 'border-[#E1B137]/30 group-hover:border-[#E1B137] group-hover:bg-[#E1B137]/10' : 'border-white/15 group-hover:border-[#E1B137]/50'">
-              <i :class="[p.icon, 'text-xl md:text-2xl transition-colors duration-300', i === 1 ? 'text-[#E1B137]' : 'text-white/60 group-hover:text-[#E1B137]']"></i>
-            </div>
-            <h3 class="font-display text-lg md:text-xl text-white mb-4 group-hover:text-[#E1B137] transition-colors duration-300">{{ p.title }}</h3>
-            <p class="text-white/45 text-sm leading-relaxed group-hover:text-white/65 transition-colors duration-300">{{ p.description }}</p>
+            </button>
           </div>
         </div>
       </div>
@@ -497,6 +462,62 @@
       </Transition>
     </Teleport>
 
+    <!-- SLIDE-IN PANEL — Explore Our Path -->
+    <Teleport to="body">
+      <Transition name="fade">
+        <div v-if="showPathPanel"
+          class="fixed inset-0 z-50 bg-[#0d1e26]/75 backdrop-blur-md"
+          @click.self="closePathPanel">
+        </div>
+      </Transition>
+      <Transition name="path-panel">
+        <div v-if="showPathPanel"
+          class="fixed inset-y-0 right-0 z-50 w-full sm:w-[90%] md:w-[75%] lg:w-[55%] h-full overflow-y-auto bg-[#2b4b58] shadow-2xl">
+          <div class="absolute inset-0 opacity-[0.04] pointer-events-none"
+            style="background-image: radial-gradient(circle, white 1px, transparent 1px); background-size: 28px 28px;"></div>
+
+          <div class="relative px-6 md:px-12 py-10 md:py-16">
+            <div class="flex items-center justify-between mb-12 md:mb-16">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-px bg-[#E1B137]"></div>
+                <span class="text-[#E1B137] text-[10px] font-bold uppercase tracking-[0.35em] font-display">Our Foundation</span>
+              </div>
+              <button @click="closePathPanel"
+                class="w-10 h-10 flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-colors">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+
+            <h2 class="font-display text-3xl md:text-5xl text-white mb-5">
+              Explore <em class="not-italic text-[#E1B137]">Our Path</em>
+            </h2>
+            <p class="text-white/50 text-sm md:text-base leading-relaxed mb-12 md:mb-16 max-w-lg">
+              Three principles that shape every step of the journey we walk together, from first visit to lasting transformation.
+            </p>
+
+            <div class="grid sm:grid-cols-1 gap-6">
+              <div v-for="(p, i) in pathPrinciples" :key="i"
+                class="group relative bg-white/5 border border-white/10 p-8 hover:border-[#E1B137]/50 hover:bg-white/8 transition-all duration-500 overflow-hidden">
+                <div class="absolute bottom-0 left-0 h-0.5 w-0 bg-[#E1B137] group-hover:w-full transition-all duration-500"></div>
+                <div class="w-14 h-14 flex items-center justify-center mb-6 border transition-all duration-300"
+                  :class="i === 1 ? 'border-[#E1B137]/30 group-hover:border-[#E1B137] group-hover:bg-[#E1B137]/10' : 'border-white/15 group-hover:border-[#E1B137]/50'">
+                  <i :class="[p.icon, 'text-xl transition-colors duration-300', i === 1 ? 'text-[#E1B137]' : 'text-white/60 group-hover:text-[#E1B137]']"></i>
+                </div>
+                <h3 class="font-display text-lg text-white mb-3 group-hover:text-[#E1B137] transition-colors duration-300">{{ p.title }}</h3>
+                <p class="text-white/45 text-sm leading-relaxed group-hover:text-white/65 transition-colors duration-300">{{ p.description }}</p>
+              </div>
+            </div>
+
+            <button @click="closePathPanel"
+              class="mt-10 inline-flex items-center gap-3 border border-white/30 text-white px-8 py-4 font-display font-bold text-[11px] uppercase tracking-[0.2em] hover:border-[#E1B137] hover:text-[#E1B137] transition-all duration-300">
+              Close
+              <i class="fa-solid fa-xmark text-xs"></i>
+            </button>
+          </div>
+        </div>
+      </Transition>
+    </Teleport>
+
   </main>
 </template>
 
@@ -539,6 +560,25 @@ const onScroll = () => {
     }
   }
 }
+
+// ── Explore Our Path — slide-in panel ──
+const showPathPanel = ref(false)
+
+const openPathPanel = () => {
+  showPathPanel.value = true
+  document.body.style.overflow = 'hidden'
+}
+
+const closePathPanel = () => {
+  showPathPanel.value = false
+  document.body.style.overflow = ''
+}
+
+const pathPrinciples = [
+  { icon: 'fa-solid fa-infinity', title: 'Non-Dual Awareness',    description: 'A journey that begins by recognizing the indivisible nature of existence, where self and world are expressions of one unified reality.' },
+  { icon: 'fa-solid fa-eye',      title: 'Conscious Inquiry',     description: 'Each step forward is guided by disciplined reflection, philosophical study, and courageous questioning.' },
+  { icon: 'fa-solid fa-seedling', title: 'Ecological Compassion', description: 'The path unfolds through unity, nurturing humanity and nature as sacred dimensions of one evolving consciousness.' }
+]
 
 // ── Modal ──
 const showModal    = ref(false)
@@ -664,12 +704,6 @@ const stats = [
   { value: '4',    label: 'Global Partners'    }
 ]
 
-const principles = [
-  { icon: 'fa-solid fa-infinity', title: 'Non-Dual Awareness',    description: 'Recognizing the indivisible nature of existence, where self and world are expressions of one unified reality.' },
-  { icon: 'fa-solid fa-eye',      title: 'Conscious Inquiry',     description: 'Cultivating clarity through disciplined reflection, philosophical study, and courageous questioning.' },
-  { icon: 'fa-solid fa-seedling', title: 'Ecological Compassion', description: 'Acting from unity, nurturing humanity and nature as sacred dimensions of one evolving consciousness.' }
-]
-
 const contributions = [
   'Founded The Art of Living Center in 2010',
   'Authored 3 books on Advaita philosophy',
@@ -696,14 +730,22 @@ const trustees = [
 ]
 
 // ── Lifecycle ──
+const handleEscape = (e) => {
+  if (e.key === 'Escape' && showPathPanel.value) {
+    closePathPanel()
+  }
+}
+
 onMounted(() => {
   AOS.init({ duration: 800, once: true, offset: 50, easing: 'ease-out' })
   window.addEventListener('scroll', onScroll, { passive: true })
+  document.addEventListener('keydown', handleEscape)
   onScroll()
 })
 
 onUnmounted(() => {
   window.removeEventListener('scroll', onScroll)
+  document.removeEventListener('keydown', handleEscape)
   document.body.style.overflow = ''
 })
 </script>
@@ -742,5 +784,14 @@ onUnmounted(() => {
 
 .parallax-layer {
   transition: transform 0.1s ease-out;
+}
+
+.path-panel-enter-active,
+.path-panel-leave-active {
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.path-panel-enter-from,
+.path-panel-leave-to {
+  transform: translateX(100%);
 }
 </style>

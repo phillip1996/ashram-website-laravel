@@ -126,7 +126,7 @@
             <div class="text-xs text-slate-500 mt-1">Volunteers</div>
           </div>
           <div>
-            <div class="text-3xl font-serif font-bold text-[#E1B137]">5</div>
+            <div class="text-3xl font-serif font-bold text-[#E1B137]">6</div>
             <div class="text-xs text-slate-500 mt-1">Active Programs</div>
           </div>
         </div>
