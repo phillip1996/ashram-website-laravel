@@ -1,6 +1,6 @@
 <template>
   <main class="page-wrapper font-body">
-        <Head>
+    <Head>
       <title>About | The Lekki Ashram</title>
       <meta name="description" content="Discover the story and mission behind The Lekki Ashram - a sanctuary for higher living rooted in Advaita philosophy and ecological stewardship." />
       <meta property="og:title" content="About | The Lekki Ashram" />
@@ -78,13 +78,15 @@
       </div>
     </section>
 
-    <!-- STATS BAR -->
-    <section class="bg-[#2b4b58]">
+    <!-- STATS BAR (ANIMATED) -->
+    <section class="bg-[#2b4b58]" ref="statsRef">
       <div class="max-w-6xl mx-auto px-6 md:px-12">
         <div class="grid grid-cols-2 md:grid-cols-4 divide-x divide-white/10">
-          <div v-for="stat in stats" :key="stat.label"
+          <div v-for="(stat, i) in stats" :key="stat.label"
             class="py-10 px-6 text-center group hover:bg-white/5 transition-colors duration-300">
-            <div class="font-display text-3xl md:text-4xl font-bold text-[#E1B137] mb-1 group-hover:scale-110 transition-transform duration-300 inline-block">{{ stat.value }}</div>
+            <div class="font-display text-3xl md:text-4xl font-bold text-[#E1B137] mb-1 group-hover:scale-110 transition-transform duration-300 inline-block">
+              {{ animatedStats[i] }}{{ stat.suffix }}
+            </div>
             <div class="text-white/40 text-[10px] uppercase tracking-[0.35em] font-display block mt-1">{{ stat.label }}</div>
           </div>
         </div>
@@ -154,21 +156,32 @@
     </section>
 
     <!-- SECTION 3 — FOUNDER -->
-    <section class="py-16 md:py-36 bg-[#f8f7f4]">
+    <section id="founder-section" class="py-16 md:py-36 bg-[#f8f7f4]">
       <div class="max-w-6xl mx-auto px-6 md:px-12">
-        <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-24">
+        <div class="flex flex-col lg:flex-row items-start gap-12 lg:gap-24">
           <div class="w-full lg:w-7/12 space-y-6 md:space-y-8 order-2 lg:order-1">
             <div>
               <div class="flex items-center gap-3 mb-5">
                 <div class="w-8 h-px bg-[#E1B137]"></div>
-                <span class="text-[#E1B137] text-[10px] font-bold uppercase tracking-[0.35em] font-display">Converner</span>
+                <span class="text-[#E1B137] text-[10px] font-bold uppercase tracking-[0.35em] font-display">Convener</span>
               </div>
               <h2 class="font-display text-3xl md:text-5xl text-[#2b4b58] leading-tight mb-6">
                 Iyke <em class="not-italic text-[#E1B137]">OHAEGBU</em>
               </h2>
-              <p class="text-slate-500 text-sm md:text-base leading-relaxed">
-                Converner of The Art of Living Center, Iyke Ohaegbu has dedicated over 15 years to teaching Advaita Vedanta and guiding individuals toward self-realization. His teachings blend ancient wisdom with contemporary understanding.
-              </p>
+              <div class="space-y-4 text-slate-500 text-sm md:text-base leading-relaxed">
+                <p>
+                  Iyke, as fondly called by friends, is the Convener of The Art of Living Center, Lekki-Nigeria, fondly called The Lekki Ashram. He has dedicated over 15 years to the teaching of Advaita and guiding individuals toward the consequent amazing experience of self-realization. His teachings blend ancient wisdom with contemporary understanding.
+                </p>
+                <p>
+                  He prefers a very ascetic lifestyle and in the past three decades, has criss-crossed various professional and academic fields, ranging from, but not limited to, the natural sciences, environment, construction, theology, philosophy, and mysticism.
+                </p>
+                <p>
+                  His earliest years were heavily influenced by epistemology, especially the moral principle of categorical imperative as famously propounded by Immanuel Kant. Later years by works of legendary spiritualists, biologists, and historians, namely B.K.S. Iyengar, Swami Vivekananda, famous English poet and critic Gerald Massey, Charles Darwin, Richard Dawkins, Jiddu Krishnamurti, and Noah Yuval Harari.
+                </p>
+                <p>
+                  Much of his engagements and public opinions on Advaita were borne out of personal experiences and association with the Vedanta Society of New York, United States of America, led by Swami Sarvapriyananda.
+                </p>
+              </div>
             </div>
 
             <div class="grid sm:grid-cols-2 gap-3">
@@ -183,7 +196,7 @@
 
           </div>
 
-          <div class="w-full lg:w-5/12 relative order-1 lg:order-2">
+          <div class="w-full lg:w-5/12 relative order-1 lg:order-2 lg:sticky lg:top-24">
             <div class="overflow-hidden shadow-2xl">
               <img src="/img/trustees/founder.jpg" alt="Iyke OHAEGBU"
                 class="w-full h-[320px] md:h-[540px] object-cover hover:scale-105 transition-transform duration-700" />
@@ -199,7 +212,7 @@
       </div>
     </section>
 
-    <!-- SECTION 4 — BOARD OF TRUSTEES (Local Images) -->
+    <!-- SECTION 4 — BOARD OF TRUSTEES (3 members, images fully visible) -->
     <section class="py-16 md:py-36 bg-white">
       <div class="max-w-6xl mx-auto px-6 md:px-12">
         <div class="text-center mb-12 md:mb-16">
@@ -212,20 +225,19 @@
             Board of <em class="not-italic text-[#E1B137]">Trustees</em>
           </h2>
           <p class="text-slate-400 max-w-md mx-auto text-sm leading-relaxed">
-            Three dedicated individuals who oversee our mission and ensure sustainable growth.
+            Three dedicated trustees who oversee our mission and ensure sustainable growth, alongside our Convener, Iyke Ohaegbu.
           </p>
         </div>
 
         <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           <div v-for="(t, i) in trustees" :key="i"
             class="group bg-[#f8f7f4] border border-slate-100 hover:border-[#E1B137]/40 hover:shadow-xl transition-all duration-400 overflow-hidden flex flex-col">
-            <div class="relative h-48 md:h-52 overflow-hidden">
-              <!-- use object-top to show face/head -->
+            <div class="relative h-64 md:h-72 overflow-hidden bg-white flex items-center justify-center">
               <img :src="t.image" :alt="t.name"
-                class="w-full h-full object-cover object-top-[-30%] transition-transform duration-700 group-hover:scale-105" />
+                class="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105" />
               <div class="absolute inset-0 bg-gradient-to-t from-[#0d1e26]/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               <div class="absolute bottom-3 left-3 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-2 group-hover:translate-y-0">
-                <span class="bg-[#E1B137] text-[#0d1e26] text-[8px] font-display font-bold uppercase tracking-[0.3em] px-3 py-1.5">{{ t.expertise }}</span>
+                <span class="bg-[#E1B137] text-[#0d1e26] text-[8px] font-display font-bold uppercase tracking-[0.3em] px-3 py-1.5">{{ t.role }}</span>
               </div>
             </div>
             <div class="p-6 flex-1 flex flex-col">
@@ -233,17 +245,7 @@
                 <h3 class="font-display text-lg text-[#2b4b58] mb-0.5">{{ t.name }}</h3>
                 <p class="text-[#E1B137] text-[10px] font-bold uppercase tracking-[0.25em] font-display">{{ t.role }}</p>
               </div>
-              <p class="text-slate-500 text-sm leading-relaxed flex-1 mb-5">{{ t.bio }}</p>
-              <div class="flex gap-2 pt-4 border-t border-slate-200">
-                <a v-if="t.linkedin" :href="t.linkedin" target="_blank"
-                  class="w-8 h-8 border border-slate-200 flex items-center justify-center text-slate-400 hover:bg-[#0077B5] hover:border-[#0077B5] hover:text-white transition-all text-xs">
-                  <i class="fa-brands fa-linkedin-in"></i>
-                </a>
-                <a v-if="t.twitter" :href="t.twitter" target="_blank"
-                  class="w-8 h-8 border border-slate-200 flex items-center justify-center text-slate-400 hover:bg-[#1DA1F2] hover:border-[#1DA1F2] hover:text-white transition-all text-xs">
-                  <i class="fa-brands fa-twitter"></i>
-                </a>
-              </div>
+              <p class="text-slate-500 text-sm leading-relaxed flex-1">{{ t.bio }}</p>
             </div>
           </div>
         </div>
@@ -314,6 +316,10 @@
               <i class="fa-solid fa-phone text-[#E1B137] text-xs"></i>
               +234 906 925 8377
             </a>
+            <a href="tel:+2348129050431" class="text-white/70 hover:text-white/90 transition-colors flex items-center gap-2 text-sm">
+              <i class="fa-solid fa-phone text-[#E1B137] text-xs"></i>
+              +234 812 905 0431
+            </a>
             <a href="mailto:info@lekkiashram.com" class="text-white/70 hover:text-white/90 transition-colors flex items-center gap-2 text-sm">
               <i class="fa-solid fa-envelope text-[#E1B137] text-xs"></i>
               info@lekkiashram.com
@@ -352,7 +358,6 @@
 
             <div class="p-6 md:p-7 overflow-y-auto max-h-[calc(90vh-80px)]">
               <form @submit.prevent="submitForm" class="space-y-5">
-                <!-- Type of Visit -->
                 <div>
                   <label class="block text-[11px] font-bold uppercase tracking-widest text-slate-600 mb-3 font-display">Type of Visit *</label>
                   <div class="grid grid-cols-2 gap-3">
@@ -374,7 +379,6 @@
                   <p v-if="errors.visitType" class="text-red-500 text-xs mt-1">{{ errors.visitType }}</p>
                 </div>
 
-                <!-- Date & Time -->
                 <div class="grid md:grid-cols-2 gap-4">
                   <div>
                     <label class="block text-[11px] font-bold uppercase tracking-widest text-slate-600 mb-2 font-display">Preferred Date *</label>
@@ -398,7 +402,6 @@
                   </div>
                 </div>
 
-                <!-- Name & Email -->
                 <div class="grid md:grid-cols-2 gap-4">
                   <div>
                     <label class="block text-[11px] font-bold uppercase tracking-widest text-slate-600 mb-2 font-display">Full Name *</label>
@@ -416,7 +419,6 @@
                   </div>
                 </div>
 
-                <!-- Phone & Guests -->
                 <div class="grid md:grid-cols-2 gap-4">
                   <div>
                     <label class="block text-[11px] font-bold uppercase tracking-widest text-slate-600 mb-2 font-display">Phone</label>
@@ -436,7 +438,6 @@
                   </div>
                 </div>
 
-                <!-- Special Requests -->
                 <div>
                   <label class="block text-[11px] font-bold uppercase tracking-widest text-slate-600 mb-2 font-display">Special Requests</label>
                   <textarea v-model="form.requests" rows="3" placeholder="Any specific requirements..."
@@ -536,6 +537,7 @@ const { showToast } = useToast()
 // ── Parallax ──
 const heroRef    = ref(null)
 const ctaRef     = ref(null)
+const statsRef   = ref(null)
 const heroParallax = ref(0)
 const ctaParallax  = ref(0)
 
@@ -559,6 +561,60 @@ const onScroll = () => {
       ctaParallax.value = scrollPastCTA * 0.3
     }
   }
+}
+
+// ── Animated Stats ──
+const stats = [
+  { value: 15,  suffix: '+', label: 'Years of Service'  },
+  { value: 100, suffix: '+', label: 'Retreats Conducted' },
+  { value: 4,   suffix: '',  label: 'Trustees'           },
+  { value: 4,   suffix: '',  label: 'Global Partners'    }
+]
+
+const animatedStats = ref(stats.map(() => 0))
+const hasAnimated = ref(false)
+
+const animateCount = (index, target, duration = 2000) => {
+  const startTime = performance.now()
+  const startValue = 0
+
+  const step = (currentTime) => {
+    const elapsed = currentTime - startTime
+    const progress = Math.min(elapsed / duration, 1)
+    const eased = 1 - Math.pow(1 - progress, 3)
+    animatedStats.value[index] = Math.floor(eased * (target - startValue) + startValue)
+
+    if (progress < 1) {
+      requestAnimationFrame(step)
+    } else {
+      animatedStats.value[index] = target
+    }
+  }
+
+  requestAnimationFrame(step)
+}
+
+const startStatsAnimation = () => {
+  if (hasAnimated.value) return
+  hasAnimated.value = true
+  stats.forEach((stat, i) => {
+    setTimeout(() => animateCount(i, stat.value), i * 150)
+  })
+}
+
+const setupStatsObserver = () => {
+  if (!statsRef.value) return
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        startStatsAnimation()
+        observer.disconnect()
+      }
+    })
+  }, { threshold: 0.3 })
+
+  observer.observe(statsRef.value)
 }
 
 // ── Explore Our Path — slide-in panel ──
@@ -586,13 +642,13 @@ const isSubmitting = ref(false)
 const errors = ref({})
 
 const form = reactive({
-  visitType: 'meditation', 
-  date: '', 
+  visitType: 'meditation',
+  date: '',
   time: '',
-  name: '', 
-  email: '', 
-  phone: '', 
-  guests: '1', 
+  name: '',
+  email: '',
+  phone: '',
+  guests: '1',
   requests: ''
 })
 
@@ -603,39 +659,35 @@ const minDate = computed(() => {
 
 const whatsappMsg = `Hello, I'm interested in visiting The Lekki Ashram. Please help me schedule a visit. Thank you!`
 
-const openModal  = () => { 
+const openModal  = () => {
   showModal.value = true
-  document.body.style.overflow = 'hidden' 
+  document.body.style.overflow = 'hidden'
 }
 
-const closeModal = () => { 
+const closeModal = () => {
   showModal.value = false
-  document.body.style.overflow = '' 
+  document.body.style.overflow = ''
 }
 
-// ── CORRECTED FORM SUBMISSION ──
 const submitForm = () => {
-  // 1. Validate required fields
   const requiredFields = ['visitType', 'date', 'time', 'name', 'email']
   const newErrors = {}
-  
+
   requiredFields.forEach(field => {
     if (!form[field]) {
       newErrors[field] = `${field.charAt(0).toUpperCase() + field.slice(1)} is required`
     }
   })
-  
+
   if (Object.keys(newErrors).length > 0) {
     errors.value = newErrors
     showToast('Please fill in all required fields.', 'error')
     return
   }
-  
-  // 2. Reset errors and start submission
+
   errors.value = {}
   isSubmitting.value = true
 
-  // 3. Timeout fallback (prevents infinite loading)
   const timeoutId = setTimeout(() => {
     if (isSubmitting.value) {
       isSubmitting.value = false
@@ -643,20 +695,19 @@ const submitForm = () => {
     }
   }, 30000)
 
-  // 4. Send request
   router.post('/visit-requests', form, {
     preserveState: true,
     preserveScroll: true,
     onSuccess: (page) => {
       clearTimeout(timeoutId)
       isSubmitting.value = false
-      
+
       if (page.props.flash?.success) {
         showToast(page.props.flash.success, 'success')
       } else {
         showToast('Your visit request has been sent. We\'ll confirm within 24 hours.', 'success')
       }
-      
+
       setTimeout(() => {
         closeModal()
         Object.assign(form, {
@@ -675,7 +726,7 @@ const submitForm = () => {
       clearTimeout(timeoutId)
       isSubmitting.value = false
       errors.value = err
-      
+
       if (err.email) {
         showToast(err.email, 'error')
       } else if (err.name) {
@@ -690,41 +741,31 @@ const submitForm = () => {
     },
     onFinish: () => {
       clearTimeout(timeoutId)
-      // Always reset submitting state when request finishes
       isSubmitting.value = false
     }
   })
 }
 
 // ── Static Data ──
-const stats = [
-  { value: '15+',  label: 'Years of Service'  },
-  { value: '500+', label: 'Retreats Conducted' },
-  { value: '3',    label: 'Trustees'           },
-  { value: '4',    label: 'Global Partners'    }
-]
-
 const contributions = [
-  'Founded The Art of Living Center in 2010',
-  'Authored 3 books on Advaita philosophy',
-  'Led 500+ meditation retreats worldwide',
-  'Established UNEP partnership in 2018'
+  'Founded The Art of Living Center, Lekki - Nigeria in the late 2018',
+  'Led scores of both private and public meditation retreats.',
 ]
 
 const trustees = [
   {
     name: 'Mrs. Julie Ann Van-Vleck',
-    bio: 'Former UNEP consultant with 20+ years in environmental policy and sustainable development.',
+    bio: 'A spiritual seeker and notary public with over two decades in corporate governance. She has dedicated 20+ years to counseling, awakening, and consciousness studies, guiding seekers to unique self-realization experiences.',
     image: '/img/trustees/Julie Ann.png',
   },
   {
     name: 'Prof. Habeeb Abiodun Sanni',
-    bio: 'Head of Philosophy at University of Lagos, specializing in Eastern philosophy and consciousness.',
+    bio: 'A devout Muslim and respected international scholar at Lagos State University. An astute philosopher and avid nature lover whose work covers the history of Lagos and environmental stewardship.',
     image: '/img/trustees/Habeeb Sanni.jpg',
   },
   {
     name: 'Dr. Narendra Nath Datta',
-    bio: 'CFO of Green Energy Solutions, bringing financial expertise to sustainable initiatives.',
+    bio: 'Fondly called Dr. D, he is a devout Hindu and saint-like figure. He has dedicated over 50 years to yoga, psychology, farming, neurosurgery, Advaita Vedanta, and classical philosophy.',
     image: '/img/trustees/Narendra Datta.png',
   },
 ]
@@ -741,6 +782,10 @@ onMounted(() => {
   window.addEventListener('scroll', onScroll, { passive: true })
   document.addEventListener('keydown', handleEscape)
   onScroll()
+
+  setTimeout(() => {
+    setupStatsObserver()
+  }, 100)
 })
 
 onUnmounted(() => {
