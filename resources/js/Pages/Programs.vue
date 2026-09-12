@@ -243,7 +243,7 @@
                 </div>
               </div>
 
-              <!-- Contact Card (NEW) -->
+              <!-- Contact Card -->
               <div class="bg-white border border-slate-200 p-6">
                 <div class="flex items-center gap-3 mb-5">
                   <div class="w-8 h-px bg-[#E1B137]"></div>
@@ -465,6 +465,9 @@
       </Transition>
     </Teleport>
 
+    <!-- ===== TOAST CONTAINER ===== -->
+    <ToastContainer />
+
   </div>
 </template>
 
@@ -473,6 +476,7 @@ import { ref, reactive, computed } from 'vue'
 import { Link, router } from '@inertiajs/vue3'
 import GuestLayout from '@/Layouts/GuestLayout.vue'
 import { useToast } from '@/Composables/useToast'
+import ToastContainer from '@/Components/ToastContainer.vue'
 
 defineOptions({ layout: GuestLayout })
 
@@ -763,25 +767,27 @@ const submitEnrollForm = () => {
     preserveScroll: true,
     onSuccess: (page) => {
       isSubmitting.value = false
-      
+
+      // 1. Close the modal FIRST so it's out of the way
+      closeEnrollModal()
+
+      // 2. Reset the form for the next use
+      Object.assign(enrollForm, {
+        date: '',
+        time: '',
+        name: '',
+        email: '',
+        phone: '',
+        guests: '1',
+        requests: ''
+      })
+
+      // 3. Then show the toast (now visible since the modal is gone)
       if (page.props.flash?.success) {
         showToast(page.props.flash.success, 'success')
       } else {
         showToast('Your enrollment request has been sent. We\'ll confirm within 24 hours.', 'success')
       }
-      
-      setTimeout(() => {
-        closeEnrollModal()
-        Object.assign(enrollForm, {
-          date: '',
-          time: '',
-          name: '',
-          email: '',
-          phone: '',
-          guests: '1',
-          requests: ''
-        })
-      }, 2000)
     },
     onError: (err) => {
       isSubmitting.value = false

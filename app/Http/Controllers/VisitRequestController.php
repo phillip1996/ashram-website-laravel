@@ -4,16 +4,33 @@ namespace App\Http\Controllers;
 
 use App\Models\VisitRequest;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\VisitRequestConfirmation;
 use App\Mail\NewVisitRequestNotification;
 
 class VisitRequestController extends Controller
 {
+    /**
+     * Valid values for visitType across both entry points:
+     * - the About page's "Schedule a Visit" modal (meditation, retreat)
+     * - the Programs page's "Enroll Now" modal (program slugs)
+     */
+    protected const VALID_VISIT_TYPES = [
+        'meditation',
+        'retreat',
+        'meditation-retreats',
+        'advaita-study',
+        'eco-conservation',
+        'satsang',
+        'wellness',
+        'lectures',
+    ];
+
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'visitType' => 'required|in:meditation,retreat',
+            'visitType' => ['required', Rule::in(self::VALID_VISIT_TYPES)],
             'date' => 'required|date|after_or_equal:today',
             'time' => 'required|string',
             'name' => 'required|string|max:255',

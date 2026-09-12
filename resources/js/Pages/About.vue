@@ -229,7 +229,7 @@
           </p>
         </div>
 
-        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
           <div v-for="(t, i) in trustees" :key="i"
             class="group bg-[#f8f7f4] border border-slate-100 hover:border-[#E1B137]/40 hover:shadow-xl transition-all duration-400 overflow-hidden flex flex-col">
             <div class="relative h-64 md:h-72 overflow-hidden bg-white flex items-center justify-center">
@@ -245,7 +245,35 @@
                 <h3 class="font-display text-lg text-[#2b4b58] mb-0.5">{{ t.name }}</h3>
                 <p class="text-[#E1B137] text-[10px] font-bold uppercase tracking-[0.25em] font-display">{{ t.role }}</p>
               </div>
-              <p class="text-slate-500 text-sm leading-relaxed flex-1">{{ t.bio }}</p>
+
+              <!-- Bio with Read More toggle -->
+              <div class="relative">
+                <p
+                  class="text-slate-500 text-sm leading-relaxed transition-all duration-500 overflow-hidden"
+                  :class="expandedBio[i] ? 'max-h-[800px]' : 'max-h-[120px]'"
+                >
+                  {{ t.bio }}
+                </p>
+
+                <!-- Fade overlay when collapsed -->
+                <div
+                  v-if="!expandedBio[i] && t.bio.length > 200"
+                  class="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-[#f8f7f4] to-transparent pointer-events-none transition-opacity duration-300"
+                ></div>
+              </div>
+
+              <!-- Read More / Less button -->
+              <button
+                v-if="t.bio.length > 200"
+                @click="toggleBio(i)"
+                class="mt-3 self-start inline-flex items-center gap-1.5 text-[10px] font-display font-bold uppercase tracking-[0.2em] text-[#E1B137] hover:text-[#2b4b58] transition-colors duration-300"
+              >
+                {{ expandedBio[i] ? 'Read Less' : 'Read More' }}
+                <i
+                  class="fa-solid fa-chevron-down text-[8px] transition-transform duration-300"
+                  :class="expandedBio[i] ? 'rotate-180' : ''"
+                ></i>
+              </button>
             </div>
           </div>
         </div>
@@ -760,7 +788,7 @@ const trustees = [
   },
   {
     name: 'Prof. Habeeb Abiodun Sanni',
-    bio: 'A devout Muslim and respected international scholar at Lagos State University. An astute philosopher and avid nature lover whose work covers the history of Lagos and environmental stewardship.',
+    bio: 'Habeeb Abiodun Sanni holds a Bachelor of Arts (Hons), a master\'s degree in history and diplomacy from Lagos University, Ojo, Lagos, in 1988 and 1996, respectively, and a Ph.D. from the Ibadan School of History, University of Ibadan, in 2016. He has made significant contributions to both academic and community services, with over 38 peer-reviewed articles in local and international journals and books to his credit. He has also served in different capacities within the university and Lagos State. He was a member of the Commission of Inquiry into the Oloja Chieftaincy family dispute in 2006. He was also a member of the Lagos State Historical Committee sent to the National Archives, Kew Gardens, London in 2013, to retrieve historical documents on Lagos history. He also served in various capacities at the Lagos State University, Ojo; he was a two-term Assistant Director at the Centre for General Nigerian Studies from 2017 to 2021 and Director of the Directorate of Skills Development and Entrepreneurship from 2022 to date. He is a member of several academic and professional associations, including the Historical Society of Nigeria, the African Studies Association of the United Kingdom, the Royal African Society of the U.K., the Lagos Studies Association, Friends of the National Archives, U.K., and the African Studies Association of the United States of America. He is also a member of the prestigious Eko Club. He is married and blessed with children.',
     image: '/img/trustees/Habeeb Sanni.jpg',
   },
   {
@@ -769,6 +797,13 @@ const trustees = [
     image: '/img/trustees/Narendra Datta.png',
   },
 ]
+
+// ── Bio expansion state ──
+const expandedBio = ref(trustees.map(() => false))
+
+const toggleBio = (index) => {
+  expandedBio.value[index] = !expandedBio.value[index]
+}
 
 // ── Lifecycle ──
 const handleEscape = (e) => {
