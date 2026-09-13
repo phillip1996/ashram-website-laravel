@@ -12,19 +12,35 @@ use App\Mail\NewVisitRequestNotification;
 class VisitRequestController extends Controller
 {
     /**
-     * Valid values for visitType across both entry points:
-     * - the About page's "Schedule a Visit" modal (meditation, retreat)
-     * - the Programs page's "Enroll Now" modal (program slugs)
+     * Every visitType value sent across all pages with a booking modal:
+     * About, Programs, and the individual Support pages
+     * (Conservation, MeditationPrograms, Satsang, Therapy, Wellness).
      */
     protected const VALID_VISIT_TYPES = [
+        // About.vue
         'meditation',
         'retreat',
+        // Programs.vue (Enroll modal — program slugs)
         'meditation-retreats',
         'advaita-study',
         'eco-conservation',
         'satsang',
         'wellness',
         'lectures',
+        // Support/Conservation.vue
+        'conservation-reforestation',
+        'conservation-wildlife',
+        // Support/MeditationPrograms.vue
+        'mindfulness',
+        // Support/Satsang.vue
+        'satsang-inperson',
+        'satsang-online',
+        // Support/Therapy.vue
+        'consultancy',
+        'therapy',
+        // Support/Wellness.vue
+        'wellness-functional',
+        'wellness-nutrition',
     ];
 
     public function store(Request $request)
