@@ -225,7 +225,7 @@
             Board of <em class="not-italic text-[#E1B137]">Trustees</em>
           </h2>
           <p class="text-slate-400 max-w-md mx-auto text-sm leading-relaxed">
-            Three dedicated trustees who oversee our mission and ensure sustainable growth, alongside our Convener, Iyke Ohaegbu.
+            Three dedicated trustees who oversee our mission and ensure sustainable growth, alongside our Convener.
           </p>
         </div>
 

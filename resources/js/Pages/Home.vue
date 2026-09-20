@@ -181,7 +181,7 @@
                 <h3 class="font-serif text-[#2b4b58] text-lg font-medium mb-2 leading-snug group-hover:text-[#E1B137] transition-colors">
                   {{ podcast.title }}
                 </h3>
-                <div class="text-slate-400 text-sm leading-relaxed mb-5 line-clamp-2" v-html="podcast.description"></div>
+                <div class="text-slate-400 text-sm leading-relaxed mb-5 line-clamp-2">{{ stripHtml(podcast.description) }}</div>
                 <div class="flex items-center justify-between pt-4 border-t border-slate-100">
                   <div class="flex items-center gap-2.5">
                     <div class="w-8 h-8 rounded-full overflow-hidden border-2 border-white shadow-sm">
@@ -263,7 +263,7 @@
                 <h4 class="font-serif text-[#2b4b58] text-lg font-medium mb-2 group-hover:text-[#E1B137] transition-colors">
                   {{ article.title }}
                 </h4>
-                <div class="text-slate-400 text-sm mb-4 line-clamp-2" v-html="article.description"></div>
+                <div class="text-slate-400 text-sm mb-4 line-clamp-2">{{ stripHtml(article.description) }}</div>
                 <div class="flex items-center justify-between pt-3 border-t border-slate-100">
                   <Link :href="'/article/' + article.id"
                     class="text-[#2b4b58] text-xs font-bold uppercase tracking-wider hover:text-[#E1B137] transition-colors inline-flex items-center gap-1.5">
@@ -400,8 +400,19 @@
           <div class="absolute right-0 top-0 bottom-0 w-16 md:w-28 bg-gradient-to-l from-[#20404c] to-transparent z-10 pointer-events-none"></div>
           <div class="marquee-viewport">
             <div class="marquee-track">
-              <div v-for="(partner, index) in marqueePartners" :key="index"
-                class="group relative bg-white/[0.04] border border-[#E1B137]/30 px-8 py-9 flex flex-col items-center justify-center gap-4 shrink-0 w-[220px] transition-all duration-400 hover:border-[#E1B137] hover:bg-white/[0.06] hover:scale-[1.02]">
+              <!-- ✅ Partner card wrapped in a link if website exists -->
+              <component
+                :is="partner.website ? 'a' : 'div'"
+                v-for="(partner, index) in marqueePartners"
+                :key="index"
+                :href="partner.website || undefined"
+                :target="partner.website ? '_blank' : undefined"
+                :rel="partner.website ? 'noopener noreferrer' : undefined"
+                class="group relative bg-white/[0.04] border border-[#E1B137]/30 px-8 py-9 flex flex-col items-center justify-center gap-4 shrink-0 w-[220px] transition-all duration-400"
+                :class="partner.website
+                  ? 'hover:border-[#E1B137] hover:bg-white/[0.06] hover:scale-[1.02] cursor-pointer'
+                  : 'hover:border-[#E1B137]/50'"
+              >
                 <div class="h-14 flex items-center justify-center">
                   <img v-if="partner.logo" :src="partner.logo" :alt="partner.name"
                     loading="lazy"
@@ -413,8 +424,12 @@
                 <div class="text-center">
                   <p class="text-white font-semibold text-sm tracking-wide">{{ partner.name }}</p>
                   <p class="text-[#E1B137] text-[9px] uppercase tracking-[0.2em] mt-0.5">{{ partner.location }}</p>
+                  <i
+                    v-if="partner.website"
+                    class="fa-solid fa-arrow-up-right-from-square text-white/40 text-[10px] mt-2 group-hover:text-[#E1B137] transition-colors"
+                  ></i>
                 </div>
-              </div>
+              </component>
             </div>
           </div>
         </div>
@@ -482,7 +497,7 @@
                   <h3 class="font-serif text-[#2b4b58] text-lg font-medium mb-2 group-hover:text-[#E1B137] transition-colors">
                     {{ news.title }}
                   </h3>
-                  <p class="text-slate-400 text-sm mb-4 line-clamp-2">{{ news.description }}</p>
+                  <p class="text-slate-400 text-sm mb-4 line-clamp-2">{{ stripHtml(news.description) }}</p>
                   <Link :href="'/news/' + news.id"
                     class="text-[#2b4b58] text-xs font-bold uppercase tracking-wider hover:text-[#E1B137] transition-colors inline-flex items-center gap-1.5">
                     Read More <i class="fa-solid fa-chevron-right text-[9px]"></i>
@@ -690,6 +705,35 @@ const formatDate = (date) => {
   } catch (e) {
     return date
   }
+}
+
+// ── Strip HTML tags from a string — used for card excerpts ──
+// Handles both raw HTML and HTML-escaped entities from the backend
+const stripHtml = (html) => {
+  if (!html) return ''
+  let s = String(html)
+  // 1. Decode HTML entities first (in case the backend sent &lt;p&gt;)
+  s = s
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&#x27;/g, "'")
+    .replace(/&apos;/g, "'")
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&')
+  // 2. Strip all HTML tags
+  s = s.replace(/<[^>]*>/g, ' ')
+  // 3. Decode again (in case entities were double-encoded)
+  s = s
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&')
+  // 4. Collapse whitespace
+  return s.replace(/\s+/g, ' ').trim()
 }
 
 // ── Recipe Image Helper ──

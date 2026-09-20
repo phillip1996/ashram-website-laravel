@@ -21,14 +21,10 @@
           <div v-if="form.errors.title" class="text-red-500 text-xs mt-1">{{ form.errors.title }}</div>
         </div>
 
-        <!-- Description -->
+        <!-- Description (Quill) -->
         <div>
-          <label class="block text-sm font-medium text-gray-700">Description</label>
-          <textarea
-            v-model="form.description"
-            rows="4"
-            class="w-full border-gray-300 rounded-md shadow-sm focus:ring-[#E1B137] focus:border-[#E1B137]"
-          ></textarea>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+          <QuillEditor v-model="form.description" placeholder="Write the news article…" />
           <div v-if="form.errors.description" class="text-red-500 text-xs mt-1">{{ form.errors.description }}</div>
         </div>
 
@@ -138,6 +134,7 @@
 import AdminLayout from '@/Layouts/AdminLayout.vue'
 import { Link, useForm } from '@inertiajs/vue3'
 import FileUpload from '@/Components/Admin/FileUpload.vue'
+import QuillEditor from '@/Components/Admin/QuillEditor.vue'
 
 const form = useForm({
   title: '',

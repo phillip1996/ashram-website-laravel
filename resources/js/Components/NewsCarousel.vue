@@ -82,7 +82,8 @@
               <h3 class="font-serif text-[#2b4b58] text-lg font-medium mb-2 group-hover:text-[#E1B137] transition-colors line-clamp-2">
                 {{ item.title }}
               </h3>
-              <p class="text-slate-400 text-sm mb-4 line-clamp-2">{{ item.description }}</p>
+              <!-- ✅ Clean excerpt: HTML stripped, no raw tags shown -->
+              <p class="text-slate-400 text-sm mb-4 line-clamp-2">{{ stripHtml(item.description) }}</p>
               <div class="flex items-center justify-between pt-3 border-t border-slate-100">
                 <Link 
                   :href="item.link || `/news/${item.id}`"
@@ -148,6 +149,24 @@ const formatDate = (date) => {
   } catch (e) {
     return date
   }
+}
+
+/**
+ * Strip HTML tags from a string for use in card excerpts.
+ * Decodes common HTML entities so they display cleanly.
+ */
+const stripHtml = (html) => {
+  if (!html) return ''
+  return String(html)
+    .replace(/<[^>]*>/g, ' ')       // replace tags with a space
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/\s+/g, ' ')           // collapse whitespace
+    .trim()
 }
 
 const slides = computed(() => {
