@@ -53,6 +53,11 @@ Route::get('/contact', function () {
     ]);
 })->name('contact');
 
+// ─────────────────────────────────────────────
+// GET INVOLVED (Donations — Coming Soon)
+// ─────────────────────────────────────────────
+Route::inertia('/get-involved', 'GetInvolved')->name('get-involved');
+
 // ── Legal Pages ──
 Route::get('/privacy-policy', function () {
     return Inertia::render('PrivacyPolicy');

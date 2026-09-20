@@ -12,18 +12,20 @@
         prevEl: '.swiper-button-prev',
       }"
       class="ashram-hero-slider w-full h-full"
+      @swiper="onSwiper"
     >
       <swiper-slide v-for="(slide, index) in slides" :key="index">
         <div class="relative w-full h-[80vh] md:h-[95vh] flex items-center justify-center overflow-hidden">
 
-          <!-- VIDEO BACKGROUND -->
+          <!-- VIDEO BACKGROUND — lazy: only active slide autoplays -->
           <video
             v-if="slide.type === 'video'"
-            autoplay
+            :ref="el => setVideoRef(el, index)"
+            :autoplay="index === currentSlide"
             muted
             loop
             playsinline
-            preload="auto"
+            preload="metadata"
             class="hero-video"
             :poster="slide.poster"
           >
@@ -36,6 +38,7 @@
             v-else
             :src="slide.src"
             :alt="slide.title"
+            loading="lazy"
             class="absolute inset-0 w-full h-full object-cover"
           />
 
@@ -89,6 +92,7 @@
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import { Navigation, Autoplay, EffectFade } from 'swiper/modules'
 import { Link } from '@inertiajs/vue3'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 
 import 'swiper/css'
 import 'swiper/css/navigation'
@@ -103,6 +107,59 @@ const props = defineProps({
 })
 
 const modules = [Navigation, Autoplay, EffectFade]
+
+// ── Swiper instance ──
+let swiperInstance = null
+const currentSlide = ref(0)
+
+// ── Video refs (so we can pause non-active videos) ──
+const videoRefs = ref({})
+
+const setVideoRef = (el, index) => {
+  if (el) videoRefs.value[index] = el
+}
+
+const pauseInactiveVideos = () => {
+  Object.entries(videoRefs.value).forEach(([idx, video]) => {
+    const i = Number(idx)
+    if (i === currentSlide.value) {
+      // Active slide — ensure it's playing (muted, so no policy issue)
+      const playPromise = video.play()
+      if (playPromise && typeof playPromise.catch === 'function') {
+        playPromise.catch(() => {})
+      }
+    } else {
+      // Inactive slides — pause to save CPU and bandwidth
+      video.pause()
+    }
+  })
+}
+
+const onSwiper = (swiper) => {
+  swiperInstance = swiper
+  currentSlide.value = swiper.realIndex
+
+  swiper.on('slideChange', () => {
+    currentSlide.value = swiper.realIndex
+    pauseInactiveVideos()
+  })
+
+  // Initial: play active, pause the rest
+  // (delay so DOM refs are ready)
+  setTimeout(pauseInactiveVideos, 100)
+}
+
+onMounted(() => {
+  // Belt and braces in case swiper event fires before refs are ready
+  setTimeout(pauseInactiveVideos, 500)
+})
+
+onBeforeUnmount(() => {
+  if (swiperInstance) {
+    swiperInstance.destroy(true, true)
+    swiperInstance = null
+  }
+})
 </script>
 
 <style scoped>
@@ -127,7 +184,7 @@ const modules = [Navigation, Autoplay, EffectFade]
   to { transform: scale(1.08); }
 }
 
-/* ── Standard, professional, static nav buttons — no animation ── */
+/* ── Standard, professional, static nav buttons ── */
 :deep(.story-nav) {
   width: 48px !important;
   height: 48px !important;

@@ -4,6 +4,20 @@ return [
     'home' => [
         [
             'type' => 'video',
+            'src' => 'videos/logo-animated.mp4',       
+            'poster' => 'images/logo-poster.jpg',     
+            'category' => 'The Lekki Ashram',
+            'title' => 'Art of Living Center',
+            'subtitle' => 'A sanctuary for mind, body, and nature. Where ancient wisdom meets modern living.',
+            'philosophyText' => 'Learn More',
+            'philosophyLink' => '/about',
+            'supportText' => 'Get Involved',
+            'supportLink' => '/get-involved',
+        ],
+
+        // ── Existing slides (unchanged) ──
+        [
+            'type' => 'video',
             'src' => 'videos/Non - Dualism.mp4',
             'poster' => 'images/concencration.jpg',
             'category' => 'Advaita & Self-Discovery',
@@ -60,7 +74,7 @@ return [
             'philosophyText' => 'Guidance Philosophy',
             'philosophyLink' => '/philosophy/consultancy',
             'supportText' => 'Book Session',
-            'supportLink' => '/support/therapy'
+            'supportLink' => '/support/therapy',
         ],
-  ],
+    ],
 ];

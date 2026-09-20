@@ -400,7 +400,7 @@
           <div class="absolute right-0 top-0 bottom-0 w-16 md:w-28 bg-gradient-to-l from-[#20404c] to-transparent z-10 pointer-events-none"></div>
           <div class="marquee-viewport">
             <div class="marquee-track">
-              <!-- ✅ Partner card wrapped in a link if website exists -->
+              <!-- ✅ Partner card: clickable if website exists, no icon -->
               <component
                 :is="partner.website ? 'a' : 'div'"
                 v-for="(partner, index) in marqueePartners"
@@ -424,10 +424,6 @@
                 <div class="text-center">
                   <p class="text-white font-semibold text-sm tracking-wide">{{ partner.name }}</p>
                   <p class="text-[#E1B137] text-[9px] uppercase tracking-[0.2em] mt-0.5">{{ partner.location }}</p>
-                  <i
-                    v-if="partner.website"
-                    class="fa-solid fa-arrow-up-right-from-square text-white/40 text-[10px] mt-2 group-hover:text-[#E1B137] transition-colors"
-                  ></i>
                 </div>
               </component>
             </div>
