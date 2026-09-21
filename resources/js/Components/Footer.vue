@@ -11,7 +11,7 @@
           <div class="sm:col-span-2 space-y-4 lg:space-y-5">
             <img src="/img/logo.png" alt="The Lekki Ashram" class="h-10 w-auto brightness-0 invert" />
             <p class="text-white/50 text-sm leading-relaxed max-w-sm">
-              A sanctuary for higher living, founded on the principles of Advaita, ecological stewardship, and human evolution.
+              A sanctuary for higher living, founded on the principles of Advaita, ecological stewardship, and social order.
             </p>
             <div class="flex gap-3 pt-1">
               <a href="https://x.com/AshramLekki" class="footer-social"><i class="fa-brands fa-x-twitter"></i></a>

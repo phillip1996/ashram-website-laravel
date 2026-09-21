@@ -354,7 +354,7 @@
             </a>
             <span class="text-white/70 flex items-center gap-2 text-sm">
               <i class="fa-solid fa-clock text-[#E1B137] text-xs"></i>
-              Mon–Sat: 9AM–6PM
+              Mon–Fri: 10AM–4PM
             </span>
           </div>
         </div>
