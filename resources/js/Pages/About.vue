@@ -332,10 +332,9 @@
               <i class="fa-brands fa-whatsapp"></i>
               WhatsApp Us
             </a>
-            <Link href="/programs"
+            <Link href="/get-involved"
               class="inline-flex items-center justify-center gap-3 border border-white/30 text-white px-8 py-4 font-display font-bold text-[11px] uppercase tracking-[0.2em] hover:border-[#E1B137] hover:text-[#E1B137] transition-all duration-300">
-              <i class="fa-solid fa-book-open"></i>
-              View Programs
+                  <i class="fa-solid fa-hand-holding-heart"></i> Get Involved
             </Link>
           </div>
 

@@ -11,8 +11,8 @@ return [
             'subtitle' => 'A sanctuary for higher living, founded on the principles of Advaita, ecological stewardship, and social order.',
             'philosophyText' => 'Learn More',
             'philosophyLink' => '/about',
-            'supportText' => 'Get Involved',
-            'supportLink' => '/get-involved',
+            'supportText' => 'View Programs',
+            'supportLink' => '/programs',
         ],
 
         // ── Existing slides (unchanged) ──
