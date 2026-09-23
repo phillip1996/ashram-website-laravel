@@ -485,10 +485,10 @@
                   </div>
                 </div>
                 <div class="p-6">
-                  <div class="flex gap-2 text-slate-400 text-xs mb-3">
-                    <span>{{ formatDate(news.date) }}</span>
-                    <span>·</span>
-                    <span>{{ news.read_time || news.readTime }}</span>
+                  <div class="flex flex-nowrap items-center gap-2 text-slate-400 text-xs mb-3">
+                    <span class="whitespace-nowrap">{{ formatDate(news.date) }}</span>
+                    <span class="text-slate-300">·</span>
+                    <span class="whitespace-nowrap">{{ news.read_time || news.readTime }}</span>
                   </div>
                   <h3 class="font-serif text-[#2b4b58] text-lg font-medium mb-2 group-hover:text-[#E1B137] transition-colors">
                     {{ news.title }}
