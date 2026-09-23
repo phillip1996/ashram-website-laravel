@@ -46,11 +46,11 @@
           </p>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
           <div v-for="(pillar, i) in pillars" :key="i"
-            class="group relative bg-white border border-slate-100 p-8 hover:shadow-xl hover:-translate-y-1 transition-all duration-400 overflow-hidden">
+            class="group relative flex flex-col h-full bg-white border border-slate-100 p-8 hover:shadow-xl hover:-translate-y-1 transition-all duration-400 overflow-hidden">
             <div class="absolute bottom-0 left-0 h-0.5 w-0 bg-[#E1B137] group-hover:w-full transition-all duration-500"></div>
-            <div class="w-14 h-14 rounded-full flex items-center justify-center mb-6 transition-colors duration-300 relative"
+            <div class="w-14 h-14 rounded-full flex items-center justify-center mb-6 transition-colors duration-300 relative shrink-0"
               :class="i % 2 === 0 ? 'bg-[#E1B137]/20 group-hover:bg-[#E1B137]' : 'bg-[#2b4b58]/20 group-hover:bg-[#2b4b58]'">
               
               <!-- ✅ Custom Image Icon (for Advaita) -->
@@ -107,9 +107,9 @@
           </p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
           <div v-for="(item, i) in experiences" :key="i"
-            class="group relative bg-white/5 border border-white/10 p-8 hover:border-[#E1B137]/40 hover:bg-white/10 hover:-translate-y-1 transition-all duration-400">
+            class="group relative flex flex-col h-full bg-white/5 border border-white/10 p-8 hover:border-[#E1B137]/40 hover:bg-white/10 hover:-translate-y-1 transition-all duration-400">
             <div class="flex items-start gap-4 mb-5">
               <div class="w-12 h-12 bg-[#E1B137] flex items-center justify-center shrink-0">
                 <span class="text-white font-bold font-serif text-base">{{ item.year.slice(2) }}</span>
@@ -147,7 +147,7 @@
         </div>
 
         <div v-if="podcasts && podcasts.length > 0">
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
             <div v-for="podcast in visiblePodcasts" :key="podcast.id"
               class="group relative flex flex-col h-full bg-white border border-slate-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-400 overflow-hidden">
               <div class="absolute bottom-0 left-0 h-0.5 w-0 bg-[#E1B137] group-hover:w-full transition-all duration-500 z-10"></div>
@@ -174,25 +174,25 @@
                 </div>
               </div>
               <div class="p-6 flex flex-col flex-1">
-                <div class="flex justify-between items-center mb-2">
+                <div class="flex justify-between items-center gap-2 mb-2">
                   <span class="text-[#E1B137] text-[9px] font-bold uppercase tracking-[0.25em]">{{ podcast.category }}</span>
                   <span class="text-slate-400 text-xs text-nowrap">{{ formatDate(podcast.date) }}</span>
                 </div>
                 <h3 class="font-serif text-[#2b4b58] text-lg font-medium mb-2 leading-snug group-hover:text-[#E1B137] transition-colors">
                   {{ podcast.title }}
                 </h3>
-                <div class="text-slate-400 text-sm leading-relaxed mb-5 line-clamp-2 min-h-[2.5rem]">{{ stripHtml(podcast.description) }}</div>
-                <div class="flex items-center justify-between pt-4 border-t border-slate-100 mt-auto">
-                  <div class="flex items-center gap-2.5">
-                    <div class="w-8 h-8 rounded-full overflow-hidden border-2 border-white shadow-sm">
+                <div class="text-slate-400 text-sm leading-relaxed mb-5 line-clamp-2 min-h-[2.5rem] sm:min-h-[2.75rem]">{{ stripHtml(podcast.description) }}</div>
+                <div class="flex items-center justify-between gap-3 pt-4 border-t border-slate-100 mt-auto">
+                  <div class="flex items-center gap-2.5 min-w-0">
+                    <div class="w-8 h-8 rounded-full overflow-hidden border-2 border-white shadow-sm shrink-0">
                       <img :src="podcast.speaker_avatar" :alt="podcast.speaker_name" loading="lazy" class="w-full h-full object-cover" />
                     </div>
-                    <div>
-                      <p class="text-[#2b4b58] text-xs font-semibold">{{ podcast.speaker_name }}</p>
-                      <p class="text-slate-400 text-[10px]">{{ podcast.speaker_role }}</p>
+                    <div class="min-w-0">
+                      <p class="text-[#2b4b58] text-xs font-semibold truncate">{{ podcast.speaker_name }}</p>
+                      <p class="text-slate-400 text-[10px] truncate">{{ podcast.speaker_role }}</p>
                     </div>
                   </div>
-                  <div class="flex items-center gap-3 text-slate-400">
+                  <div class="flex items-center gap-3 text-slate-400 shrink-0">
                     <span class="text-xs flex items-center gap-1">
                       <i class="fa-solid fa-headphones text-[10px]"></i> {{ podcast.listens }}
                     </span>
@@ -246,7 +246,7 @@
 
         <!-- Regular Articles Grid -->
         <div v-if="recentArticles && recentArticles.length > 0" class="mt-10">
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
             <div v-for="article in visibleArticles" :key="article.id"
               class="group flex flex-col h-full bg-white border border-slate-100 overflow-hidden hover:shadow-lg transition-all duration-400">
               <div class="h-44 overflow-hidden relative shrink-0">
@@ -256,20 +256,20 @@
                 <div class="absolute inset-0 bg-gradient-to-t from-[#2b4b58]/20 to-transparent"></div>
               </div>
               <div class="p-6 flex flex-col flex-1">
-                <div class="flex justify-between items-start mb-2">
+                <div class="flex justify-between items-start gap-2 mb-2">
                   <span class="text-[#E1B137] text-[9px] font-bold uppercase tracking-[0.25em]">{{ article.category }}</span>
                   <span class="text-slate-400 text-xs text-nowrap">{{ formatDate(article.date) }}</span>
                 </div>
                 <h4 class="font-serif text-[#2b4b58] text-lg font-medium mb-2 group-hover:text-[#E1B137] transition-colors">
                   {{ article.title }}
                 </h4>
-                <div class="text-slate-400 text-sm mb-4 line-clamp-2 min-h-[2.5rem]">{{ stripHtml(article.description) }}</div>
-                <div class="flex items-center justify-between pt-3 border-t border-slate-100 mt-auto">
+                <div class="text-slate-400 text-sm mb-4 line-clamp-2 min-h-[2.5rem] sm:min-h-[2.75rem]">{{ stripHtml(article.description) }}</div>
+                <div class="flex items-center justify-between gap-3 pt-3 border-t border-slate-100 mt-auto">
                   <Link :href="'/article/' + article.id"
                     class="text-[#2b4b58] text-xs font-bold uppercase tracking-wider hover:text-[#E1B137] transition-colors inline-flex items-center gap-1.5">
                     Read More <i class="fa-solid fa-chevron-right text-[9px]"></i>
                   </Link>
-                  <span class="text-slate-400 text-xs">{{ article.read_time }}</span>
+                  <span class="text-slate-400 text-xs text-nowrap">{{ article.read_time }}</span>
                 </div>
               </div>
             </div>
@@ -300,7 +300,7 @@
     ========================================================= -->
     <section id="ayurvedic-recipes" class="py-16 md:py-24 bg-white">
       <div class="max-w-6xl mx-auto px-6 md:px-12">
-        <div class="flex items-center justify-between mb-12">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-12">
           <div>
             <div class="flex items-center gap-3 mb-4">
               <div class="w-8 h-0.5 bg-[#E1B137]"></div>
@@ -314,13 +314,13 @@
           <Link
             v-if="totalRecipesCount > 3"
             href="/ayurvedic-recipes"
-            class="hidden sm:inline-flex items-center gap-2 text-[#2b4b58] hover:text-[#E1B137] font-bold text-xs uppercase tracking-wider transition-colors"
+            class="hidden sm:inline-flex items-center gap-2 text-[#2b4b58] hover:text-[#E1B137] font-bold text-xs uppercase tracking-wider transition-colors shrink-0"
           >
             View All <i class="fa-solid fa-arrow-right"></i>
           </Link>
         </div>
 
-        <div v-if="recipes && recipes.length > 0" class="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
+        <div v-if="recipes && recipes.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
           <div v-for="recipe in recipes" :key="recipe.id"
             class="group flex flex-col h-full bg-[#f8f7f4] border border-slate-100 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-400 relative">
 
@@ -356,7 +356,7 @@
               <h3 class="font-serif text-xl text-[#2b4b58] mb-2 group-hover:text-[#E1B137] transition-colors line-clamp-1">
                 {{ recipe.title }}
               </h3>
-              <p class="text-slate-500 text-sm line-clamp-2 min-h-[2.5rem]">{{ recipe.description }}</p>
+              <p class="text-slate-500 text-sm line-clamp-2 min-h-[2.5rem] sm:min-h-[2.75rem]">{{ recipe.description }}</p>
               <Link :href="'/ayurvedic-recipes/' + recipe.slug"
                 class="mt-auto pt-4 inline-flex items-center gap-2 text-[#2b4b58] hover:text-[#E1B137] text-xs font-bold uppercase tracking-wider transition-colors">
                 View<i class="fa-solid fa-arrow-right text-[10px]"></i>
@@ -440,7 +440,7 @@
     ========================================================= -->
     <section id="news-updates" class="py-16 md:py-24 bg-[#f8f7f4] overflow-hidden">
       <div class="max-w-6xl mx-auto px-6 md:px-12">
-        <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-12">
+        <div class="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6 mb-12">
           <div>
             <div class="flex items-center gap-3 mb-4">
               <div class="w-8 h-0.5 bg-[#E1B137]"></div>
@@ -470,7 +470,7 @@
           <div class="flex transition-transform duration-500 ease-out"
             :style="{ transform: `translateX(-${currentNewsPage * 100}%)` }">
             <div v-for="(page, pIndex) in newsPages" :key="pIndex"
-              class="grid grid-cols-1 md:grid-cols-3 gap-6 shrink-0 w-full items-stretch">
+              class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 shrink-0 w-full items-stretch">
               <div v-for="news in page" :key="news.id"
                 class="group relative flex flex-col h-full bg-white border border-slate-100 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-400">
                 <div class="absolute bottom-0 left-0 h-0.5 w-0 bg-[#E1B137] group-hover:w-full transition-all duration-500 z-10"></div>
@@ -493,7 +493,7 @@
                   <h3 class="font-serif text-[#2b4b58] text-lg font-medium mb-2 group-hover:text-[#E1B137] transition-colors">
                     {{ news.title }}
                   </h3>
-                  <p class="text-slate-400 text-sm mb-4 line-clamp-2 min-h-[2.5rem]">{{ stripHtml(news.description) }}</p>
+                  <p class="text-slate-400 text-sm mb-4 line-clamp-2 min-h-[2.5rem] sm:min-h-[2.75rem]">{{ stripHtml(news.description) }}</p>
                   <Link :href="'/news/' + news.id"
                     class="text-[#2b4b58] text-xs font-bold uppercase tracking-wider hover:text-[#E1B137] transition-colors inline-flex items-center gap-1.5 mt-auto pt-3 border-t border-slate-100">
                     Read More <i class="fa-solid fa-chevron-right text-[9px]"></i>
