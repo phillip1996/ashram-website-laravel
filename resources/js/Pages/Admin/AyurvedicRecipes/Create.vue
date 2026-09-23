@@ -16,14 +16,14 @@
       </div>
 
       <div>
-        <label class="block text-sm font-medium text-gray-700">Ingredients *</label>
-        <textarea v-model="form.ingredients" rows="4" required placeholder="List each ingredient on a new line" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-[#E1B137] focus:border-[#E1B137]"></textarea>
+        <label class="block text-sm font-medium text-gray-700">Ingredients</label>
+        <textarea v-model="form.ingredients" rows="4" placeholder="List each ingredient on a new line (optional)" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-[#E1B137] focus:border-[#E1B137]"></textarea>
         <div v-if="form.errors.ingredients" class="text-red-500 text-xs">{{ form.errors.ingredients }}</div>
       </div>
 
       <div>
-        <label class="block text-sm font-medium text-gray-700">Instructions *</label>
-        <textarea v-model="form.instructions" rows="6" required placeholder="Step by step instructions (one step per line)" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-[#E1B137] focus:border-[#E1B137]"></textarea>
+        <label class="block text-sm font-medium text-gray-700">Instructions</label>
+        <textarea v-model="form.instructions" rows="6" placeholder="Step by step instructions (one step per line) — optional" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-[#E1B137] focus:border-[#E1B137]"></textarea>
         <div v-if="form.errors.instructions" class="text-red-500 text-xs">{{ form.errors.instructions }}</div>
       </div>
 
@@ -55,13 +55,12 @@
       </div>
 
       <!-- =========================================================
-           GALLERY SECTION – Upload Multiple Images at Once
+           GALLERY SECTION
       ========================================================= -->
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-2">Gallery Images</label>
         <p class="text-xs text-slate-400 mb-2">Select multiple images to add to the recipe gallery</p>
 
-        <!-- Hidden file input -->
         <input
           type="file"
           ref="galleryInput"
@@ -71,7 +70,6 @@
           @change="handleGalleryFiles"
         />
 
-        <!-- Upload button -->
         <button
           type="button"
           @click="$refs.galleryInput.click()"
@@ -81,7 +79,6 @@
           <span class="text-sm text-slate-600">Select Multiple Images</span>
         </button>
 
-        <!-- Preview of selected files -->
         <div v-if="form.gallery_images && form.gallery_images.length > 0" class="mt-3">
           <p class="text-xs text-slate-500 mb-2">{{ form.gallery_images.length }} image(s) selected</p>
           <div class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
@@ -139,7 +136,7 @@ const form = useForm({
   video_file: null,
   video_url: '',
   category: '',
-  gallery_images: [], // 👈 This will hold multiple file objects
+  gallery_images: [],
   is_featured: false,
   is_active: true,
 })
@@ -147,7 +144,7 @@ const form = useForm({
 const handleGalleryFiles = (event) => {
   const files = Array.from(event.target.files)
   form.gallery_images.push(...files)
-  event.target.value = '' // Reset so the same files can be re-selected
+  event.target.value = ''
 }
 
 const removeGalleryImage = (index) => {

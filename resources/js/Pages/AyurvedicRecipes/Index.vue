@@ -4,7 +4,7 @@
     <section class="relative min-h-[45vh] flex items-center overflow-hidden bg-[#2b4b58]">
       <img
         src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=1600&auto=format&fit=crop&q=80"
-        alt="Ayurvedic Recipes"
+        alt="Ayurvedic Living"
         class="absolute inset-0 w-full h-full object-cover object-center"
       />
       <div class="absolute inset-0 bg-[#0d1e26]/60"></div>
@@ -34,8 +34,8 @@
           <div class="w-20 h-20 bg-[#E1B137]/10 rounded-full flex items-center justify-center mx-auto mb-5">
             <i class="fa-solid fa-mortar-pestle text-3xl text-[#E1B137]"></i>
           </div>
-          <h3 class="text-2xl font-serif text-[#2b4b58] mb-2">No Recipes Yet</h3>
-          <p class="text-slate-400 text-sm max-w-sm mx-auto">Check back soon for nourishing Ayurvedic recipes.</p>
+          <h3 class="text-2xl font-serif text-[#2b4b58] mb-2">No Recipes insight Yet</h3>
+          <p class="text-slate-400 text-sm max-w-sm mx-auto">Check back soon for nourishing Ayurvedic recipes and insight .</p>
         </div>
 
         <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

@@ -38,7 +38,7 @@ class AyurvedicRecipeController extends Controller
             }
         }
 
-        // ✅ If still not found, throw 404
+        // If still not found, throw 404
         if (!$recipe) {
             abort(404);
         }

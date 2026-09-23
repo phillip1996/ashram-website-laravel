@@ -16,14 +16,14 @@
       </div>
 
       <div>
-        <label class="block text-sm font-medium text-gray-700">Ingredients *</label>
-        <textarea v-model="form.ingredients" rows="4" required placeholder="List each ingredient on a new line" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-[#E1B137] focus:border-[#E1B137]"></textarea>
+        <label class="block text-sm font-medium text-gray-700">Ingredients</label>
+        <textarea v-model="form.ingredients" rows="4" placeholder="List each ingredient on a new line (optional)" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-[#E1B137] focus:border-[#E1B137]"></textarea>
         <div v-if="form.errors.ingredients" class="text-red-500 text-xs">{{ form.errors.ingredients }}</div>
       </div>
 
       <div>
-        <label class="block text-sm font-medium text-gray-700">Instructions *</label>
-        <textarea v-model="form.instructions" rows="6" required placeholder="Step by step instructions (one step per line)" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-[#E1B137] focus:border-[#E1B137]"></textarea>
+        <label class="block text-sm font-medium text-gray-700">Instructions</label>
+        <textarea v-model="form.instructions" rows="6" placeholder="Step by step instructions (one step per line) — optional" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-[#E1B137] focus:border-[#E1B137]"></textarea>
         <div v-if="form.errors.instructions" class="text-red-500 text-xs">{{ form.errors.instructions }}</div>
       </div>
 
@@ -43,7 +43,6 @@
         <p class="text-xs text-slate-400 mt-1">Upload a JPG, PNG, or WebP image (max 5MB)</p>
         <div v-if="form.errors.image" class="text-red-500 text-xs">{{ form.errors.image }}</div>
 
-        <!-- New image preview -->
         <div v-if="imagePreviewUrl" class="mt-3 flex items-center gap-4 p-3 border rounded-md bg-slate-50">
           <img :src="imagePreviewUrl" alt="New image preview" class="w-20 h-20 object-cover rounded-md border border-slate-200" />
           <div class="flex-1">
@@ -75,7 +74,6 @@
         <p class="text-xs text-slate-400 mt-1">Upload MP4, WebM, or OGG (max 50MB)</p>
         <div v-if="form.errors.video_file" class="text-red-500 text-xs">{{ form.errors.video_file }}</div>
 
-        <!-- New video preview -->
         <div v-if="videoPreviewUrl" class="mt-3 flex items-center gap-4 p-3 border rounded-md bg-slate-50">
           <video :src="videoPreviewUrl" controls class="w-40 h-24 object-cover rounded-md border border-slate-200" />
           <div class="flex-1">
@@ -101,12 +99,11 @@
       </div>
 
       <!-- =========================================================
-           GALLERY SECTION – Existing images + upload more
+           GALLERY SECTION
       ========================================================= -->
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-2">Gallery Images</label>
 
-        <!-- ── Existing Gallery ── -->
         <div v-if="existingGalleryImages.length > 0" class="mb-4">
           <p class="text-xs text-slate-500 mb-2">Existing images</p>
           <div class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
@@ -130,10 +127,8 @@
         </div>
         <p v-else class="text-sm text-slate-400 mb-2">No gallery images yet</p>
 
-        <!-- ── Upload New Gallery Images ── -->
         <p class="text-xs text-slate-400 mb-2">Select multiple images to add to the recipe gallery</p>
 
-        <!-- Hidden file input -->
         <input
           type="file"
           ref="galleryInput"
@@ -143,7 +138,6 @@
           @change="handleGalleryFiles"
         />
 
-        <!-- Upload button -->
         <button
           type="button"
           @click="galleryInput.click()"
@@ -153,7 +147,6 @@
           <span class="text-sm text-slate-600">Select Multiple Images</span>
         </button>
 
-        <!-- Preview of newly selected files -->
         <div v-if="form.gallery_images && form.gallery_images.length > 0" class="mt-3">
           <p class="text-xs text-slate-500 mb-2">{{ form.gallery_images.length }} new image(s) selected</p>
           <div class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
@@ -208,15 +201,13 @@ const { showToast } = useToast()
 const galleryInput = ref(null)
 const galleryIdsToDelete = ref([])
 
-// ── Track existing gallery images ──
 const existingGalleryImages = ref([...(props.recipe.gallery_images || [])])
 
-// ── Form data ──
 const form = useForm({
   title: props.recipe.title,
   description: props.recipe.description,
-  ingredients: props.recipe.ingredients,
-  instructions: props.recipe.instructions,
+  ingredients: props.recipe.ingredients || '',
+  instructions: props.recipe.instructions || '',
   image: null,
   video_file: null,
   video_url: props.recipe.video_url || '',
@@ -227,7 +218,6 @@ const form = useForm({
   is_active: !!props.recipe.is_active,
 })
 
-// ─── Existing gallery removal ───
 const removeExistingGalleryImage = (id) => {
   galleryIdsToDelete.value.push(id)
   const index = existingGalleryImages.value.findIndex(item => item.id === id)
@@ -236,7 +226,6 @@ const removeExistingGalleryImage = (id) => {
   }
 }
 
-// ─── New gallery uploads ───
 const handleGalleryFiles = (event) => {
   const files = Array.from(event.target.files)
   form.gallery_images.push(...files)
@@ -247,7 +236,6 @@ const removeNewGalleryImage = (index) => {
   form.gallery_images.splice(index, 1)
 }
 
-// ─── Preview URLs ───
 const galleryPreviewUrls = ref([])
 const imagePreviewUrl = ref(null)
 const videoPreviewUrl = ref(null)
@@ -280,21 +268,17 @@ const clearNewVideo = () => {
   videoPreviewUrl.value = null
 }
 
-// ─── Cleanup preview URLs ───
 onBeforeUnmount(() => {
   if (imagePreviewUrl.value) URL.revokeObjectURL(imagePreviewUrl.value)
   if (videoPreviewUrl.value) URL.revokeObjectURL(videoPreviewUrl.value)
   galleryPreviewUrls.value.forEach(url => URL.revokeObjectURL(url))
 })
 
-// ─── 🔥 FIXED: Submit with proper image handling ───
 const submit = () => {
   if (galleryIdsToDelete.value.length > 0) {
     form.delete_gallery_ids = galleryIdsToDelete.value.join(',')
   }
 
-  // 🔥 CRITICAL FIX: Only include image if a new one was uploaded
-  // This prevents the existing image from being overwritten with null
   const submitData = {
     title: form.title,
     description: form.description,
@@ -307,22 +291,18 @@ const submit = () => {
     delete_gallery_ids: form.delete_gallery_ids,
   }
 
-  // Only add image if a new file was selected
   if (form.image && form.image instanceof File) {
     submitData.image = form.image
   }
 
-  // Only add video_file if a new file was selected
   if (form.video_file && form.video_file instanceof File) {
     submitData.video_file = form.video_file
   }
 
-  // Only add gallery_images if there are new files
   if (form.gallery_images && form.gallery_images.length > 0) {
     submitData.gallery_images = form.gallery_images
   }
 
-  // Use transform to send the data with _method: 'put'
   const transformedForm = useForm(submitData)
   
   transformedForm

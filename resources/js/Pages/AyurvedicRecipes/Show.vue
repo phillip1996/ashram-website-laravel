@@ -22,7 +22,7 @@
             </span>
             <span class="text-white/40">•</span>
             <Link href="/#ayurvedic-recipes" class="text-white/40 hover:text-white text-xs uppercase tracking-wider transition-colors">
-              ← Back to Recipes
+              ← Back
             </Link>
           </div>
           <h1 class="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-white leading-tight">
@@ -65,8 +65,8 @@
             <img :src="recipe.image_url" :alt="recipe.title" class="w-full h-auto" />
           </div>
 
-          <!-- INGREDIENTS -->
-          <div class="mb-12">
+          <!-- INGREDIENTS (only if not empty) -->
+          <div v-if="recipe.ingredients && recipe.ingredients.trim() !== ''" class="mb-12">
             <div class="flex items-center gap-4 mb-6">
               <div class="w-1 h-8 bg-[#E1B137] rounded-full"></div>
               <h2 class="text-2xl md:text-3xl font-serif text-[#2b4b58] font-medium">Ingredients</h2>
@@ -76,8 +76,8 @@
             </div>
           </div>
 
-          <!-- INSTRUCTIONS -->
-          <div class="mb-12">
+          <!-- INSTRUCTIONS (only if not empty) -->
+          <div v-if="recipe.instructions && recipe.instructions.trim() !== ''" class="mb-12">
             <div class="flex items-center gap-4 mb-6">
               <div class="w-1 h-8 bg-[#E1B137] rounded-full"></div>
               <h2 class="text-2xl md:text-3xl font-serif text-[#2b4b58] font-medium">Instructions</h2>
@@ -115,13 +115,12 @@
           <!-- SHARE & BACK -->
           <div class="pt-8 border-t border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <Link href="/#ayurvedic-recipes" class="text-[#2b4b58] hover:text-[#E1B137] transition-colors inline-flex items-center gap-2 font-medium text-sm">
-              <i class="fa-solid fa-arrow-left"></i> Back to Recipes
+              <i class="fa-solid fa-arrow-left"></i> Back
             </Link>
 
             <div class="flex items-center gap-2">
               <span class="text-xs text-slate-400 font-medium uppercase tracking-wider mr-1">Share:</span>
 
-              <!-- WhatsApp -->
               <a
                 :href="`https://wa.me/?text=${encodeURIComponent(recipe.title + ' — ' + shareUrl)}`"
                 target="_blank"
@@ -132,7 +131,6 @@
                 <i class="fa-brands fa-whatsapp text-sm"></i>
               </a>
 
-              <!-- X (Twitter) -->
               <a
                 :href="`https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent('Check out this Ayurvedic recipe: ' + recipe.title)}`"
                 target="_blank"
@@ -143,7 +141,6 @@
                 <i class="fa-brands fa-x-twitter text-sm"></i>
               </a>
 
-              <!-- Copy Link -->
               <button
                 @click="copyLink"
                 class="w-9 h-9 rounded-full bg-[#2b4b58] text-white flex items-center justify-center hover:scale-110 transition-transform duration-200"
@@ -152,7 +149,6 @@
                 <i class="fa-regular fa-copy text-sm"></i>
               </button>
 
-              <!-- Instagram – opens app or copy link -->
               <button
                 @click="shareInstagram"
                 class="w-9 h-9 rounded-full bg-gradient-to-r from-[#f09433] to-[#e6683c] text-white flex items-center justify-center hover:scale-110 transition-transform duration-200"
@@ -286,17 +282,10 @@ const fallbackCopyLink = () => {
   document.body.removeChild(textArea)
 }
 
-// ✅ Instagram share – opens app on mobile, copies link on desktop
 const shareInstagram = () => {
-  // Try to open Instagram app on mobile
   const instagramUrl = 'https://www.instagram.com/';
-  
-  // Open Instagram in new window
   window.open(instagramUrl, '_blank');
-  
-  // Also copy the link so they can paste it
   copyLink();
-  
   setTimeout(() => {
     showToast('Open Instagram and paste the link in your bio, story, or post.', 'info');
   }, 500);

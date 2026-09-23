@@ -307,7 +307,7 @@
               <span class="text-[#E1B137] text-[10px] font-bold uppercase tracking-[0.35em]">Ayurveda</span>
             </div>
             <h2 class="text-4xl md:text-5xl font-serif font-medium text-[#2b4b58]">
-              Ayurvedic <em class="not-italic text-[#E1B137]">Recipes</em>
+              Ayurvedic <em class="not-italic text-[#E1B137]">Living</em>
             </h2>
             <p class="text-slate-400 text-sm max-w-sm mt-2">Ancient wisdom for modern wellness — the sister science of yoga.</p>
           </div>
@@ -359,7 +359,7 @@
               <p class="text-slate-500 text-sm line-clamp-2">{{ recipe.description }}</p>
               <Link :href="'/ayurvedic-recipes/' + recipe.slug"
                 class="mt-4 inline-flex items-center gap-2 text-[#2b4b58] hover:text-[#E1B137] text-xs font-bold uppercase tracking-wider transition-colors">
-                View Recipe <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                View<i class="fa-solid fa-arrow-right text-[10px]"></i>
               </Link>
             </div>
           </div>

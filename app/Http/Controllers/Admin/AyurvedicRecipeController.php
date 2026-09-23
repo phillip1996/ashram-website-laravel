@@ -30,8 +30,8 @@ class AyurvedicRecipeController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'ingredients' => 'required|string',
-            'instructions' => 'required|string',
+            'ingredients' => 'nullable|string',
+            'instructions' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,webp|max:5120',
             'video_file' => 'nullable|file|mimes:mp4,webm,ogg|max:51200',
             'video_url' => 'nullable|url|max:255',
@@ -87,14 +87,13 @@ class AyurvedicRecipeController extends Controller
         ]);
     }
 
-    // 🔥 FIXED: Update method with proper image handling
     public function update(Request $request, AyurvedicRecipe $recipe)
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'ingredients' => 'required|string',
-            'instructions' => 'required|string',
+            'ingredients' => 'nullable|string',
+            'instructions' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,webp|max:5120',
             'video_file' => 'nullable|file|mimes:mp4,webm,ogg|max:51200',
             'video_url' => 'nullable|url|max:255',
@@ -107,20 +106,18 @@ class AyurvedicRecipeController extends Controller
 
         $oldSlug = $recipe->slug;
 
-        // 🔥 CRITICAL: Remove image from validated data if not uploaded
-        // This prevents the image field from being set to null
+        // Remove image from validated data if not uploaded
         if (!$request->hasFile('image')) {
             unset($validated['image']);
         }
 
-        // 🔥 CRITICAL: Remove video_file from validated data if not uploaded
+        // Remove video_file from validated data if not uploaded
         if (!$request->hasFile('video_file')) {
             unset($validated['video_file']);
         }
 
         // Handle main image - only if a new image is uploaded
         if ($request->hasFile('image')) {
-            // Delete old image if exists
             if ($recipe->image && Storage::disk('public')->exists($recipe->image)) {
                 Storage::disk('public')->delete($recipe->image);
             }
@@ -132,7 +129,6 @@ class AyurvedicRecipeController extends Controller
 
         // Handle video file - only if a new video is uploaded
         if ($request->hasFile('video_file')) {
-            // Delete old video if exists
             if ($recipe->video_file && Storage::disk('public')->exists($recipe->video_file)) {
                 Storage::disk('public')->delete($recipe->video_file);
             }
@@ -142,12 +138,11 @@ class AyurvedicRecipeController extends Controller
             $validated['video_file'] = $path;
         }
 
-        // Update the recipe (this will only update fields that are in $validated)
+        // Update the recipe
         $recipe->update($validated);
 
         // Handle new gallery images
         if ($request->hasFile('gallery_images')) {
-            // Get current max order
             $maxOrder = $recipe->gallery()->max('order') ?? -1;
             
             foreach ($request->file('gallery_images') as $index => $file) {
