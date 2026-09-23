@@ -147,11 +147,11 @@
         </div>
 
         <div v-if="podcasts && podcasts.length > 0">
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
             <div v-for="podcast in visiblePodcasts" :key="podcast.id"
-              class="group relative bg-white border border-slate-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-400 overflow-hidden">
+              class="group relative flex flex-col h-full bg-white border border-slate-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-400 overflow-hidden">
               <div class="absolute bottom-0 left-0 h-0.5 w-0 bg-[#E1B137] group-hover:w-full transition-all duration-500 z-10"></div>
-              <div class="relative h-48 overflow-hidden">
+              <div class="relative h-48 overflow-hidden shrink-0">
                 <img :src="podcast.thumbnail" :alt="podcast.title"
                   loading="lazy"
                   class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
@@ -173,16 +173,16 @@
                   {{ podcast.duration }}
                 </div>
               </div>
-              <div class="p-6">
+              <div class="p-6 flex flex-col flex-1">
                 <div class="flex justify-between items-center mb-2">
                   <span class="text-[#E1B137] text-[9px] font-bold uppercase tracking-[0.25em]">{{ podcast.category }}</span>
-                  <span class="text-slate-400 text-xs">{{ formatDate(podcast.date) }}</span>
+                  <span class="text-slate-400 text-xs text-nowrap">{{ formatDate(podcast.date) }}</span>
                 </div>
                 <h3 class="font-serif text-[#2b4b58] text-lg font-medium mb-2 leading-snug group-hover:text-[#E1B137] transition-colors">
                   {{ podcast.title }}
                 </h3>
-                <div class="text-slate-400 text-sm leading-relaxed mb-5 line-clamp-2">{{ stripHtml(podcast.description) }}</div>
-                <div class="flex items-center justify-between pt-4 border-t border-slate-100">
+                <div class="text-slate-400 text-sm leading-relaxed mb-5 line-clamp-2 min-h-[2.5rem]">{{ stripHtml(podcast.description) }}</div>
+                <div class="flex items-center justify-between pt-4 border-t border-slate-100 mt-auto">
                   <div class="flex items-center gap-2.5">
                     <div class="w-8 h-8 rounded-full overflow-hidden border-2 border-white shadow-sm">
                       <img :src="podcast.speaker_avatar" :alt="podcast.speaker_name" loading="lazy" class="w-full h-full object-cover" />
@@ -246,16 +246,16 @@
 
         <!-- Regular Articles Grid -->
         <div v-if="recentArticles && recentArticles.length > 0" class="mt-10">
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
             <div v-for="article in visibleArticles" :key="article.id"
-              class="group bg-white border border-slate-100 overflow-hidden hover:shadow-lg transition-all duration-400">
-              <div class="h-44 overflow-hidden relative">
+              class="group flex flex-col h-full bg-white border border-slate-100 overflow-hidden hover:shadow-lg transition-all duration-400">
+              <div class="h-44 overflow-hidden relative shrink-0">
                 <img :src="article.image" :alt="article.title"
                   loading="lazy"
                   class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
                 <div class="absolute inset-0 bg-gradient-to-t from-[#2b4b58]/20 to-transparent"></div>
               </div>
-              <div class="p-6">
+              <div class="p-6 flex flex-col flex-1">
                 <div class="flex justify-between items-start mb-2">
                   <span class="text-[#E1B137] text-[9px] font-bold uppercase tracking-[0.25em]">{{ article.category }}</span>
                   <span class="text-slate-400 text-xs text-nowrap">{{ formatDate(article.date) }}</span>
@@ -263,8 +263,8 @@
                 <h4 class="font-serif text-[#2b4b58] text-lg font-medium mb-2 group-hover:text-[#E1B137] transition-colors">
                   {{ article.title }}
                 </h4>
-                <div class="text-slate-400 text-sm mb-4 line-clamp-2">{{ stripHtml(article.description) }}</div>
-                <div class="flex items-center justify-between pt-3 border-t border-slate-100">
+                <div class="text-slate-400 text-sm mb-4 line-clamp-2 min-h-[2.5rem]">{{ stripHtml(article.description) }}</div>
+                <div class="flex items-center justify-between pt-3 border-t border-slate-100 mt-auto">
                   <Link :href="'/article/' + article.id"
                     class="text-[#2b4b58] text-xs font-bold uppercase tracking-wider hover:text-[#E1B137] transition-colors inline-flex items-center gap-1.5">
                     Read More <i class="fa-solid fa-chevron-right text-[9px]"></i>
@@ -320,9 +320,9 @@
           </Link>
         </div>
 
-        <div v-if="recipes && recipes.length > 0" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div v-if="recipes && recipes.length > 0" class="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
           <div v-for="recipe in recipes" :key="recipe.id"
-            class="group bg-[#f8f7f4] border border-slate-100 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-400 relative">
+            class="group flex flex-col h-full bg-[#f8f7f4] border border-slate-100 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-400 relative">
 
             <!-- Featured Badge -->
             <div v-if="recipe.is_featured" class="absolute top-3 left-3 z-10">
@@ -332,7 +332,7 @@
               </span>
             </div>
 
-            <div class="relative h-48 overflow-hidden bg-slate-200">
+            <div class="relative h-48 overflow-hidden bg-slate-200 shrink-0">
               <img 
                 :src="getRecipeImage(recipe)" 
                 :alt="recipe.title"
@@ -352,13 +352,13 @@
                 <i class="fa-solid fa-play"></i> Video
               </div>
             </div>
-            <div class="p-6">
+            <div class="p-6 flex flex-col flex-1">
               <h3 class="font-serif text-xl text-[#2b4b58] mb-2 group-hover:text-[#E1B137] transition-colors line-clamp-1">
                 {{ recipe.title }}
               </h3>
-              <p class="text-slate-500 text-sm line-clamp-2">{{ recipe.description }}</p>
+              <p class="text-slate-500 text-sm line-clamp-2 min-h-[2.5rem]">{{ recipe.description }}</p>
               <Link :href="'/ayurvedic-recipes/' + recipe.slug"
-                class="mt-4 inline-flex items-center gap-2 text-[#2b4b58] hover:text-[#E1B137] text-xs font-bold uppercase tracking-wider transition-colors">
+                class="mt-auto pt-4 inline-flex items-center gap-2 text-[#2b4b58] hover:text-[#E1B137] text-xs font-bold uppercase tracking-wider transition-colors">
                 View<i class="fa-solid fa-arrow-right text-[10px]"></i>
               </Link>
             </div>
@@ -470,11 +470,11 @@
           <div class="flex transition-transform duration-500 ease-out"
             :style="{ transform: `translateX(-${currentNewsPage * 100}%)` }">
             <div v-for="(page, pIndex) in newsPages" :key="pIndex"
-              class="grid grid-cols-1 md:grid-cols-3 gap-6 shrink-0 w-full">
+              class="grid grid-cols-1 md:grid-cols-3 gap-6 shrink-0 w-full items-stretch">
               <div v-for="news in page" :key="news.id"
-                class="group relative bg-white border border-slate-100 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-400">
+                class="group relative flex flex-col h-full bg-white border border-slate-100 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-400">
                 <div class="absolute bottom-0 left-0 h-0.5 w-0 bg-[#E1B137] group-hover:w-full transition-all duration-500 z-10"></div>
-                <div class="relative h-48 overflow-hidden">
+                <div class="relative h-48 overflow-hidden shrink-0">
                   <img :src="news.image" :alt="news.title"
                     loading="lazy"
                     class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
@@ -484,7 +484,7 @@
                     </span>
                   </div>
                 </div>
-                <div class="p-6">
+                <div class="p-6 flex flex-col flex-1">
                   <div class="flex flex-nowrap items-center gap-2 text-slate-400 text-xs mb-3">
                     <span class="whitespace-nowrap">{{ formatDate(news.date) }}</span>
                     <span class="text-slate-300">·</span>
@@ -493,9 +493,9 @@
                   <h3 class="font-serif text-[#2b4b58] text-lg font-medium mb-2 group-hover:text-[#E1B137] transition-colors">
                     {{ news.title }}
                   </h3>
-                  <p class="text-slate-400 text-sm mb-4 line-clamp-2">{{ stripHtml(news.description) }}</p>
+                  <p class="text-slate-400 text-sm mb-4 line-clamp-2 min-h-[2.5rem]">{{ stripHtml(news.description) }}</p>
                   <Link :href="'/news/' + news.id"
-                    class="text-[#2b4b58] text-xs font-bold uppercase tracking-wider hover:text-[#E1B137] transition-colors inline-flex items-center gap-1.5">
+                    class="text-[#2b4b58] text-xs font-bold uppercase tracking-wider hover:text-[#E1B137] transition-colors inline-flex items-center gap-1.5 mt-auto pt-3 border-t border-slate-100">
                     Read More <i class="fa-solid fa-chevron-right text-[9px]"></i>
                   </Link>
                 </div>
