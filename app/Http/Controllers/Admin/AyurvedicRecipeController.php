@@ -28,8 +28,8 @@ class AyurvedicRecipeController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
+            'title' => 'nullable|string|max:255',
+            'description' => 'nullable|string',
             'ingredients' => 'nullable|string',
             'instructions' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,webp|max:5120',
@@ -41,6 +41,14 @@ class AyurvedicRecipeController extends Controller
             'gallery_images' => 'nullable|array',
             'gallery_images.*' => 'nullable|file|image|mimes:jpeg,png,webp|max:5120',
         ]);
+
+        // ✅ Auto-fill required DB fields if empty
+        if (empty($validated['title'])) {
+            $validated['title'] = 'Untitled Entry';
+        }
+        if (empty($validated['description'])) {
+            $validated['description'] = 'No description provided.';
+        }
 
         // Handle main image
         if ($request->hasFile('image')) {
@@ -58,7 +66,15 @@ class AyurvedicRecipeController extends Controller
             $validated['video_file'] = $path;
         }
 
-        $validated['slug'] = Str::slug($validated['title']);
+        // ✅ Auto-generate unique slug
+        $baseSlug = Str::slug($validated['title']) ?: 'entry';
+        $slug = $baseSlug;
+        $counter = 1;
+        while (AyurvedicRecipe::where('slug', $slug)->exists()) {
+            $slug = $baseSlug . '-' . $counter;
+            $counter++;
+        }
+        $validated['slug'] = $slug;
 
         $recipe = AyurvedicRecipe::create($validated);
 
@@ -77,7 +93,7 @@ class AyurvedicRecipeController extends Controller
         }
 
         return redirect()->route('admin.ayurvedic-recipes.index')
-            ->with('success', 'Recipe created successfully.');
+            ->with('success', 'Entry created successfully.');
     }
 
     public function edit(AyurvedicRecipe $recipe)
@@ -90,8 +106,8 @@ class AyurvedicRecipeController extends Controller
     public function update(Request $request, AyurvedicRecipe $recipe)
     {
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
+            'title' => 'nullable|string|max:255',
+            'description' => 'nullable|string',
             'ingredients' => 'nullable|string',
             'instructions' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,webp|max:5120',
@@ -103,6 +119,14 @@ class AyurvedicRecipeController extends Controller
             'gallery_images' => 'nullable|array',
             'gallery_images.*' => 'nullable|file|image|mimes:jpeg,png,webp|max:5120',
         ]);
+
+        // ✅ Auto-fill required DB fields if empty
+        if (empty($validated['title'])) {
+            $validated['title'] = 'Untitled Entry';
+        }
+        if (empty($validated['description'])) {
+            $validated['description'] = 'No description provided.';
+        }
 
         $oldSlug = $recipe->slug;
 
@@ -138,6 +162,16 @@ class AyurvedicRecipeController extends Controller
             $validated['video_file'] = $path;
         }
 
+        // ✅ Auto-generate unique slug if title changed
+        $newBaseSlug = Str::slug($validated['title']) ?: 'entry';
+        $slug = $newBaseSlug;
+        $counter = 1;
+        while (AyurvedicRecipe::where('slug', $slug)->where('id', '!=', $recipe->id)->exists()) {
+            $slug = $newBaseSlug . '-' . $counter;
+            $counter++;
+        }
+        $validated['slug'] = $slug;
+
         // Update the recipe
         $recipe->update($validated);
 
@@ -171,14 +205,8 @@ class AyurvedicRecipeController extends Controller
             }
         }
 
-        $newSlug = $recipe->fresh()->slug;
-        if ($oldSlug !== $newSlug) {
-            return redirect()->route('admin.ayurvedic-recipes.edit', $newSlug)
-                ->with('success', 'Recipe updated successfully. Slug updated to: ' . $newSlug);
-        }
-
         return redirect()->route('admin.ayurvedic-recipes.index')
-            ->with('success', 'Recipe updated successfully.');
+            ->with('success', 'Entry updated successfully.');
     }
 
     public function destroy(AyurvedicRecipe $recipe)
@@ -205,6 +233,6 @@ class AyurvedicRecipeController extends Controller
 
         $recipe->delete();
         return redirect()->route('admin.ayurvedic-recipes.index')
-            ->with('success', 'Recipe deleted successfully.');
+            ->with('success', 'Entry deleted successfully.');
     }
 }
