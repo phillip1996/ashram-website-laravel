@@ -256,9 +256,9 @@
                 <div class="absolute inset-0 bg-gradient-to-t from-[#2b4b58]/20 to-transparent"></div>
               </div>
               <div class="p-6">
-                <div class="flex justify-between items-center mb-2">
+                <div class="flex justify-between items-start mb-2">
                   <span class="text-[#E1B137] text-[9px] font-bold uppercase tracking-[0.25em]">{{ article.category }}</span>
-                  <span class="text-slate-400 text-xs">{{ formatDate(article.date) }}</span>
+                  <span class="text-slate-400 text-xs text-nowrap">{{ formatDate(article.date) }}</span>
                 </div>
                 <h4 class="font-serif text-[#2b4b58] text-lg font-medium mb-2 group-hover:text-[#E1B137] transition-colors">
                   {{ article.title }}
