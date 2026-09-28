@@ -23,6 +23,32 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
+Route::get('/storage-link', function () {
+    try {
+        Artisan::call('storage:link');
+        return 'Storage link created successfully!';
+    } catch (Exception $e) {
+        return 'Error: ' . $e->getMessage();
+    }
+});
+
+Route::get('/optimize-clear', function () {
+    try {
+        Artisan::call('opimize:clear');
+        return 'cache clear successfully!';
+    } catch (Exception $e) {
+        return 'Error: ' . $e->getMessage();
+    }
+});
+
+Route::get('/migrate-db', function () {
+    try {
+        Artisan::call('migrate');
+        return 'migration ran successfully!';
+    } catch (Exception $e) {
+        return 'Error: ' . $e->getMessage();
+    }
+});
 // ─────────────────────────────────────────────
 // FRONTEND ROUTES
 // ─────────────────────────────────────────────
