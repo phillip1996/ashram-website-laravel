@@ -2,11 +2,11 @@
   <div class="page-wrapper font-montserrat" v-cloak>
 
     <Head>
-      <title>The Lekki Ashram - Art of Living Center</title>
+      <title>The Lekki Ashram </title>
       <meta name="description" content="An apolitical civil society group dedicated to resolving the mysteries of life through nature conservation, Advaita philosophy, and human evolution." />
       
       <!-- Open Graph Tags -->
-      <meta property="og:title" content="The Lekki Ashram - Art of Living Center" />
+      <meta property="og:title" content="The Lekki Ashram" />
       <meta property="og:description" content="An apolitical civil society group dedicated to resolving the mysteries of life through nature conservation, Advaita philosophy, and human evolution." />
       <meta property="og:type" content="website" />
       <meta property="og:url" content="{{ url()->current() }}" />
