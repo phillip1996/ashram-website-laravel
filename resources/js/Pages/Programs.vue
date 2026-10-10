@@ -522,7 +522,7 @@ const programs = [
     title: 'Advaita Study Groups',
     category: 'Philosophy',
     shortDescription: 'Deep exploration of non-dual philosophy through weekly study, dialogue, and contemplation.',
-    fullDescription: 'Advaita Vedanta is one of the world\'s oldest and most profound philosophical traditions. This study group offers a rigorous yet accessible exploration of non-dual philosophy through classical texts, dialogue, and direct inquiry. Meeting weekly, we engage with foundational scriptures and contemporary interpretations, always grounding our study in personal experience and contemplative practice.',
+    fullDescription: 'Advaita Vedanta is one of the world\'s oldest and most profound philosophical traditions. This study group offers a rigorous yet accessible exploration of non-dual philosophy throughstudy of the classical compilation of ancient philosophical texts called the Upanishads.',
     duration: '12 weeks',
     format: 'In-Person & Online',
     level: 'Beginner',

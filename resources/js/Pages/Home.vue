@@ -203,6 +203,11 @@
                     </button>
                   </div>
                 </div>
+                <!-- ✅ Read More link to the full episode page -->
+                <Link :href="'/podcasts/' + podcast.id"
+                  class="mt-4 pt-3 border-t border-slate-100 text-[#2b4b58] text-xs font-bold uppercase tracking-wider hover:text-[#E1B137] transition-colors inline-flex items-center gap-1.5">
+                  Read More <i class="fa-solid fa-chevron-right text-[9px]"></i>
+                </Link>
               </div>
             </div>
           </div>

@@ -111,6 +111,9 @@ Route::post('/visit-requests', [PublicVisitRequestController::class, 'store'])->
 // ── Podcast Listen Counter ──
 Route::post('/podcasts/{podcast}/listen', [PodcastController::class, 'incrementListen'])->name('podcasts.listen');
 
+// ── Podcast Detail Page ──
+Route::get('/podcasts/{podcast}', [PodcastController::class, 'show'])->name('podcasts.show');
+
 // ── Audio Streaming (Range-request-capable, fixes seek/fast-forward/rewind) ──
 Route::get('/media/audio/{path}', [AudioStreamController::class, 'stream'])
     ->where('path', '.*')

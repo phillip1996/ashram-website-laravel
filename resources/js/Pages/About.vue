@@ -179,7 +179,8 @@
                   His earliest years were heavily influenced by epistemology, especially the moral principle of categorical imperative as famously propounded by Immanuel Kant. Later years by works of legendary spiritualists, biologists, and historians, namely B.K.S. Iyengar, Swami Vivekananda, famous English poet and critic Gerald Massey, Charles Darwin, Richard Dawkins, Jiddu Krishnamurti, and Noah Yuval Harari.
                 </p>
                 <p>
-                  Much of his engagements and public opinions on Advaita were borne out of personal experiences and association with the Vedanta Society of New York, United States of America, led by Swami Sarvapriyananda.
+                 Much of his public and private engagements on advaita are bourne out of personal experiences and exploration of the over one hundred  and eight (108) records of the highest philosophical truths known to man - the Upanishads; which focuses on inner wisdom, meditation and self realization.
+                 His works have benefited immensely from association with the Vedanta Society of New York, led by Swami Sarvapriyanda.
                 </p>
               </div>
             </div>

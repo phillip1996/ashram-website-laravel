@@ -63,7 +63,7 @@ class HomeController extends Controller
         $featuredPoints = config('ashram.featured_points', []);
         $experiences = [
             ['year' => '2024', 'title' => 'Foundation', 'description' => 'Establishment of the Ashram as a conscious living institution rooted in Advaita and ecology.'],
-            ['year' => '2025', 'title' => 'Ecological Integration', 'description' => 'Active conservation programs and global environmental partnerships with UNEP and WWF.'],
+            ['year' => '2025', 'title' => 'Ecological Integration', 'description' => 'Active conservation programs and global environmental partnerships with foremost conservation and biodversity organizations across the world.'],
             ['year' => '2026', 'title' => 'Global Outreach', 'description' => 'International education, philosophical dialogues, and cross-cultural collaborations.'],
         ];
 
