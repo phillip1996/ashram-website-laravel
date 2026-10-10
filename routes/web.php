@@ -20,23 +20,29 @@ use App\Http\Controllers\SubscribeController;
 use App\Http\Controllers\VisitRequestController as PublicVisitRequestController;
 use App\Http\Controllers\AyurvedicRecipeController;
 use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
+// ─────────────────────────────────────────────
+// TEMPORARY MAINTENANCE ROUTES (no terminal on host)
+// ⚠️ REMOVE THESE once you're done. They have no authentication,
+// so anyone who guesses the URL can run them on your live site.
+// ─────────────────────────────────────────────
 Route::get('/storage-link', function () {
     try {
         Artisan::call('storage:link');
         return 'Storage link created successfully!';
-    } catch (Exception $e) {
+    } catch (\Exception $e) {
         return 'Error: ' . $e->getMessage();
     }
 });
 
 Route::get('/optimize-clear', function () {
     try {
-        Artisan::call('opimize:clear');
-        return 'cache clear successfully!';
-    } catch (Exception $e) {
+        Artisan::call('optimize:clear');
+        return 'Cache cleared successfully!';
+    } catch (\Exception $e) {
         return 'Error: ' . $e->getMessage();
     }
 });
@@ -44,11 +50,12 @@ Route::get('/optimize-clear', function () {
 Route::get('/migrate-db', function () {
     try {
         Artisan::call('migrate');
-        return 'migration ran successfully!';
-    } catch (Exception $e) {
+        return 'Migration ran successfully!';
+    } catch (\Exception $e) {
         return 'Error: ' . $e->getMessage();
     }
 });
+
 // ─────────────────────────────────────────────
 // FRONTEND ROUTES
 // ─────────────────────────────────────────────
