@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>{{ $page['props']['title'] ?? 'The Lekki Ashram - Art of Living Center' }}</title>
+        <title>{{ $page['props']['title'] ?? 'The Lekki Ashram' }}</title>
 
         <!-- ===== Favicon ===== -->
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
@@ -15,7 +15,7 @@
         <meta name="theme-color" content="#E1B137" />
 
         <!-- ===== Open Graph / Social Media Meta Tags ===== -->
-        <meta property="og:title" content="{{ $page['props']['og_title'] ?? 'The Lekki Ashram - Art of Living Center' }}" />
+        <meta property="og:title" content="{{ $page['props']['og_title'] ?? 'The Lekki Ashram' }}" />
         <meta property="og:description" content="{{ $page['props']['og_description'] ?? 'An apolitical civil society group dedicated to resolving the mysteries of life through nature conservation, Advaita philosophy, and human evolution.' }}" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="{{ url()->current() }}" />
@@ -26,7 +26,7 @@
 
         <!-- Twitter Card -->
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="{{ $page['props']['og_title'] ?? 'The Lekki Ashram - Art of Living Center' }}" />
+        <meta name="twitter:title" content="{{ $page['props']['og_title'] ?? 'The Lekki Ashram' }}" />
         <meta name="twitter:description" content="{{ $page['props']['og_description'] ?? 'An apolitical civil society group dedicated to resolving the mysteries of life through nature conservation, Advaita philosophy, and human evolution.' }}" />
         <meta name="twitter:image" content="{{ $page['props']['og_image'] ?? asset('img/og-image.jpg') }}" />
 
