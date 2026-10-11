@@ -596,7 +596,7 @@ const stats = [
   { value: 16,  suffix: '+', label: 'Years of Service'  },
   { value: 103, suffix: '+', label: 'Retreats Conducted' },
   { value: 4,   suffix: '',  label: 'Trustees'           },
-  { value: 8,   suffix: '',  label: 'Global Partners'    }
+  { value:11,   suffix: '',  label: 'Global Partners'    }
 ]
 
 const animatedStats = ref(stats.map(() => 0))
