@@ -17,7 +17,7 @@
       
       <!-- Twitter Card -->
       <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:title" content="The Lekki Ashram - Art of Living Center" />
+      <meta name="twitter:title" content="The Lekki Ashram" />
       <meta name="twitter:description" content="An apolitical civil society group dedicated to resolving the mysteries of life through nature conservation, Advaita philosophy, and human evolution." />
       <meta name="twitter:image" content="{{ asset('img/og-image.jpg') }}" />
       
